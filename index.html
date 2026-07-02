@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17352f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Kapitel 5">
+  <title>Kapitel 5 Worttraining</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Aspekte neu B2</p>
+      <h1>Kapitel 5 Worttraining</h1>
+    </div>
+    <div class="stats" aria-label="Learning progress">
+      <span><strong id="xp">0</strong> XP</span>
+      <span><strong id="streak">0</strong> streak</span>
+      <span><strong id="learned">0</strong>/<span id="totalLearnWords">0</span> learned</span>
+      <span><strong id="mastered">0</strong>/<span id="totalWords">0</span> solid</span>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <aside class="sidebar" aria-label="Lesson navigation">
+      <div class="chapter-card">
+        <span class="chapter-number">5</span>
+        <div>
+          <h2>Wer Wissen schafft, macht ...</h2>
+          <p>Vocabulary from science, truth and lies, future without humans, sleep, Einstein, and smells.</p>
+        </div>
+      </div>
+
+      <div class="settings-panel">
+        <div class="flow-tabs" aria-label="Study phase">
+          <button id="learnTab" class="flow-tab active" type="button">Learn</button>
+          <button id="practiceTab" class="flow-tab" type="button">Practice</button>
+        </div>
+        <label for="modeSelect">Training mode</label>
+        <select id="modeSelect">
+          <option value="mixed">Mixed practice</option>
+          <option value="meaning">Meaning</option>
+          <option value="typing">Typing</option>
+          <option value="article">Article and plural</option>
+          <option value="cloze">Sentence gap</option>
+        </select>
+        <div class="speech-settings">
+          <label class="check-row">
+            <input id="autoSpeak" type="checkbox" checked>
+            <span>Auto pronounce in Learn</span>
+          </label>
+          <label for="speechRate">Pronunciation speed</label>
+          <select id="speechRate">
+            <option value="0.72">Slow</option>
+            <option value="0.86" selected>Normal</option>
+            <option value="1">Fast</option>
+          </select>
+          <label for="voiceSelect">German voice</label>
+          <select id="voiceSelect">
+            <option value="">Best available German voice</option>
+          </select>
+          <p id="voiceStatus" class="voice-status">Speech uses your browser voices.</p>
+        </div>
+        <button id="resetProgress" class="plain-button" type="button">Reset progress</button>
+      </div>
+
+      <nav id="lessonList" class="lesson-list"></nav>
+    </aside>
+
+    <section class="practice" aria-live="polite">
+      <div class="practice-header">
+        <div>
+          <p id="lessonKicker" class="eyebrow">All lessons</p>
+          <h2 id="promptTitle">Ready?</h2>
+        </div>
+        <div id="questionMeta" class="question-meta"></div>
+      </div>
+
+      <div id="questionPanel" class="question-panel">
+        <p class="prompt-label" id="promptLabel">Choose a lesson and start practicing.</p>
+        <div id="prompt" class="prompt">Kapitel 5 vocabulary</div>
+        <div id="answerArea" class="answer-area"></div>
+      </div>
+
+      <div id="feedback" class="feedback hidden"></div>
+
+      <div class="actions">
+        <button id="checkButton" class="primary-button" type="button">Start</button>
+        <button id="skipButton" class="secondary-button" type="button">Already know</button>
+      </div>
+    </section>
+
+    <section class="bank">
+      <div class="bank-header">
+        <div>
+          <p class="eyebrow">Vocabulary bank</p>
+          <h2>Kapitel 5 deck</h2>
+        </div>
+        <input id="searchInput" type="search" placeholder="Search German or English" aria-label="Search vocabulary">
+      </div>
+      <div id="wordGrid" class="word-grid"></div>
+    </section>
+  </main>
+
+  <template id="wordCardTemplate">
+    <article class="word-card">
+      <div class="word-card-top">
+        <span class="tag"></span>
+        <span class="mastery-dot" aria-hidden="true"></span>
+      </div>
+      <h3></h3>
+      <p class="meta"></p>
+      <p class="translation"></p>
+      <p class="example"></p>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
