@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#17352f">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Kapitel 5">
-  <title>Kapitel 5 Worttraining</title>
+  <meta name="apple-mobile-web-app-title" content="Aspekte B2">
+  <title>Aspekte B2 Worttraining</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
@@ -16,9 +16,10 @@
   <header class="topbar">
     <div>
       <p class="eyebrow">Aspekte neu B2</p>
-      <h1>Kapitel 5 Worttraining</h1>
+      <h1 id="appTitle">Worttraining</h1>
     </div>
     <div class="stats" aria-label="Learning progress">
+      <span><strong id="roundStep">1</strong>/3 round</span>
       <span><strong id="xp">0</strong> XP</span>
       <span><strong id="streak">0</strong> streak</span>
       <span><strong id="learned">0</strong>/<span id="totalLearnWords">0</span> learned</span>
@@ -26,13 +27,15 @@
     </div>
   </header>
 
+  <nav id="chapterTabs" class="chapter-tabs" aria-label="Chapter navigation"></nav>
+
   <main class="app-shell">
     <aside class="sidebar" aria-label="Lesson navigation">
       <div class="chapter-card">
-        <span class="chapter-number">5</span>
+        <span id="chapterNumber" class="chapter-number">1</span>
         <div>
-          <h2>Wer Wissen schafft, macht ...</h2>
-          <p>Vocabulary from science, truth and lies, future without humans, sleep, Einstein, and smells.</p>
+          <h2 id="chapterTitle">Neue Heimat</h2>
+          <p id="chapterSummary">Vocabulary from home, migration, languages, and integration.</p>
         </div>
       </div>
 
@@ -45,6 +48,7 @@
         <select id="modeSelect">
           <option value="mixed">Mixed practice</option>
           <option value="meaning">Meaning</option>
+          <option value="example">Example sentence</option>
           <option value="typing">Typing</option>
           <option value="article">Article and plural</option>
           <option value="cloze">Sentence gap</option>
@@ -81,6 +85,13 @@
         <div id="questionMeta" class="question-meta"></div>
       </div>
 
+      <div class="cycle-strip" aria-label="Learning cycle">
+        <span id="stageStudy" class="cycle-step active">Study</span>
+        <span id="stageRecall" class="cycle-step">Recall</span>
+        <span id="stageMix" class="cycle-step">Mix</span>
+        <span id="stageReview" class="cycle-step">Review</span>
+      </div>
+
       <div id="questionPanel" class="question-panel">
         <p class="prompt-label" id="promptLabel">Choose a lesson and start practicing.</p>
         <div id="prompt" class="prompt">Kapitel 5 vocabulary</div>
@@ -99,7 +110,7 @@
       <div class="bank-header">
         <div>
           <p class="eyebrow">Vocabulary bank</p>
-          <h2>Kapitel 5 deck</h2>
+          <h2 id="bankTitle">Kapitel deck</h2>
         </div>
         <input id="searchInput" type="search" placeholder="Search German or English" aria-label="Search vocabulary">
       </div>

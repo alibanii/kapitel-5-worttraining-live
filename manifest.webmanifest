@@ -1,7 +1,7 @@
 {
-  "name": "Kapitel 5 Worttraining",
-  "short_name": "Kapitel 5",
-  "description": "German B2 vocabulary learning and review for Kapitel 5.",
+  "name": "Aspekte B2 Worttraining",
+  "short_name": "Aspekte B2",
+  "description": "German B2 vocabulary learning and review for Kapitel 1-5.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
