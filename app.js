@@ -565,74 +565,219 @@ const exampleTranslations = {
   "auf die Nase fallen": "With this plan, the company failed."
 };
 
-const stateKey = "aspekte-b2-vocab-progress-v1";
-const learnBatchSize = 3;
-const defaultState = {
-  xp: 0,
-  streak: 0,
-  items: {},
-  speech: {
-    auto: true,
-    rate: 0.86,
-    voiceURI: ""
-  }
+const curatedExamples = {
+  "spontan": [
+    { de: "Wir haben spontan entschieden, am Wochenende ans Meer zu fahren.", en: "We spontaneously decided to go to the sea at the weekend." },
+    { de: "Eine spontane Einladung kann sehr schön sein, wenn man Zeit hat.", en: "A spontaneous invitation can be very nice when you have time." }
+  ],
+  "beschließen": [
+    { de: "Nach langem Nachdenken beschloss er, den Kurs zu wechseln.", en: "After thinking for a long time, he decided to change the course." },
+    { de: "Die Familie beschließt gemeinsam, nach Berlin zu ziehen.", en: "The family decides together to move to Berlin." }
+  ],
+  "etwas erledigen": [
+    { de: "Ich muss heute noch die Anmeldung erledigen.", en: "I still have to take care of the registration today." },
+    { de: "Bevor sie abreist, erledigt sie alle wichtigen Termine.", en: "Before she leaves, she takes care of all important appointments." }
+  ],
+  "und so weiter": [
+    { de: "Für die Bewerbung brauche ich Zeugnisse, Fotos, Formulare und so weiter.", en: "For the application I need certificates, photos, forms, and so on." },
+    { de: "Im neuen Land musste sie eine Wohnung suchen, ein Konto eröffnen und so weiter.", en: "In the new country she had to find an apartment, open an account, and so on." }
+  ],
+  "allerdings": [
+    { de: "Der Job ist interessant, allerdings verdient man am Anfang wenig.", en: "The job is interesting; however, at the beginning you earn little." },
+    { de: "Ich würde gern kommen, allerdings habe ich morgen eine Prüfung.", en: "I would like to come; however, I have an exam tomorrow." }
+  ],
+  "sitzen": [
+    { de: "Während des Gesprächs saß sie sehr ruhig am Tisch.", en: "During the conversation she sat very calmly at the table." },
+    { de: "Im Zug saßen viele Reisende mit großen Koffern.", en: "Many travelers with large suitcases were sitting on the train." }
+  ],
+  "die Beziehung": [
+    { de: "Eine gute Beziehung braucht Vertrauen und Geduld.", en: "A good relationship needs trust and patience." },
+    { de: "Nach dem Umzug wurde ihre Beziehung schwieriger.", en: "After the move their relationship became more difficult." }
+  ],
+  "die Grafikerin": [
+    { de: "Die Grafikerin entwirft Plakate für ein Theater.", en: "The graphic designer designs posters for a theater." },
+    { de: "Als Grafikerin arbeitet sie oft mit Farben und Schriften.", en: "As a graphic designer she often works with colors and fonts." }
+  ],
+  "die Agentur": [
+    { de: "Die Agentur betreut mehrere internationale Kunden.", en: "The agency serves several international clients." },
+    { de: "In einer kleinen Agentur kennt jeder die Projekte der anderen.", en: "In a small agency everyone knows the others' projects." }
+  ],
+  "etwas bereuen": [
+    { de: "Er bereut es nicht, dass er ins Ausland gegangen ist.", en: "He does not regret going abroad." },
+    { de: "Viele bereuen später nur die Chancen, die sie nicht genutzt haben.", en: "Many later regret only the opportunities they did not use." }
+  ],
+  "locker": [
+    { de: "Die Atmosphäre im Büro ist locker, aber trotzdem professionell.", en: "The atmosphere in the office is relaxed but still professional." },
+    { de: "Sie spricht lockerer, wenn sie die Leute schon kennt.", en: "She speaks more casually when she already knows the people." }
+  ],
+  "sehnsüchtig": [
+    { de: "Das Kind wartet sehnsüchtig auf die Ferien.", en: "The child waits longingly for the holidays." },
+    { de: "Nach Monaten im Ausland dachte er sehnsüchtig an seine Familie.", en: "After months abroad, he thought longingly of his family." }
+  ],
+  "das Fingerspitzengefühl": [
+    { de: "Bei schwierigen Kunden braucht man viel Fingerspitzengefühl.", en: "With difficult customers one needs a lot of tact." },
+    { de: "Eine gute Lehrerin erklärt Fehler mit Fingerspitzengefühl.", en: "A good teacher explains mistakes with sensitivity." }
+  ],
+  "die Ausdauer": [
+    { de: "Für einen langen Arbeitstag braucht man Ausdauer.", en: "For a long working day one needs stamina." },
+    { de: "Ausdauer hilft, wenn ein Projekt länger dauert als geplant.", en: "Perseverance helps when a project takes longer than planned." }
+  ],
+  "sich auf etwas einstellen": [
+    { de: "Im neuen Job musste sie sich auf andere Regeln einstellen.", en: "In the new job she had to adjust to different rules." },
+    { de: "Wer umzieht, muss sich auf viele Veränderungen einstellen.", en: "Anyone who moves has to prepare for many changes." }
+  ],
+  "etwas einsehen": [
+    { de: "Nach dem Gespräch sah er seinen Fehler ein.", en: "After the conversation he realized his mistake." },
+    { de: "Sie musste einsehen, dass der Plan zu teuer war.", en: "She had to accept that the plan was too expensive." }
+  ],
+  "mit etwas verbunden sein": [
+    { de: "Der Beruf ist mit viel Verantwortung verbunden.", en: "The profession is connected with a lot of responsibility." },
+    { de: "Ein Umzug ins Ausland ist oft mit Unsicherheit verbunden.", en: "Moving abroad is often connected with uncertainty." }
+  ],
+  "das Geschick": [
+    { de: "Für Reparaturen braucht man handwerkliches Geschick.", en: "For repairs one needs manual skill." },
+    { de: "Sie hat großes Geschick im Umgang mit Menschen.", en: "She has great skill in dealing with people." }
+  ],
+  "die Genauigkeit": [
+    { de: "Bei offiziellen Dokumenten ist Genauigkeit wichtig.", en: "With official documents, accuracy is important." },
+    { de: "Der Techniker arbeitet mit großer Genauigkeit.", en: "The technician works with great precision." }
+  ],
+  "restaurieren": [
+    { de: "Das Museum restauriert alte Gemälde.", en: "The museum restores old paintings." },
+    { de: "Sie restaurieren ein historisches Haus im Zentrum.", en: "They are restoring a historic house in the center." }
+  ],
+  "etwas stimmen": [
+    { de: "Vor dem Konzert muss jemand das Klavier stimmen.", en: "Before the concert someone has to tune the piano." },
+    { de: "Der Musiker stimmt seine Gitarre vor jeder Probe.", en: "The musician tunes his guitar before every rehearsal." }
+  ],
+  "die Leidenschaft": [
+    { de: "Ihre Leidenschaft für Musik begann schon in der Kindheit.", en: "Her passion for music began in childhood." },
+    { de: "Wer seine Leidenschaft zum Beruf macht, arbeitet oft sehr motiviert.", en: "Those who turn their passion into a profession often work very motivated." }
+  ],
+  "etwas umgestalten": [
+    { de: "Sie möchte ihr Zimmer komplett umgestalten.", en: "She wants to completely redesign her room." },
+    { de: "Die Firma gestaltet ihre Webseite neu um.", en: "The company is redesigning its website." }
+  ],
+  "nicht reichen": [
+    { de: "Das Geld reicht nicht für eine größere Wohnung.", en: "The money is not enough for a bigger apartment." },
+    { de: "Gute Ideen reichen nicht, man muss sie auch umsetzen.", en: "Good ideas are not enough; one also has to implement them." }
+  ],
+  "sich die Langeweile vertreiben": [
+    { de: "Auf dem Bahnhof vertrieb er sich die Langeweile mit Musik.", en: "At the station he passed the time with music." },
+    { de: "Viele Kinder vertreiben sich die Langeweile mit Spielen.", en: "Many children relieve boredom with games." }
+  ],
+  "klauen": [
+    { de: "Jemand hat im Supermarkt Schokolade geklaut.", en: "Someone stole chocolate in the supermarket." },
+    { de: "Klauen ist keine Kleinigkeit, auch wenn es nur ein billiger Gegenstand ist.", en: "Stealing is not a small matter, even if it is only a cheap item." }
+  ],
+  "randalieren": [
+    { de: "Nach dem Spiel randalierten einige Fans in der Innenstadt.", en: "After the game some fans vandalized things downtown." },
+    { de: "Wer randaliert, zerstört oft auch das Vertrauen der Nachbarn.", en: "Whoever vandalizes often also destroys the neighbors' trust." }
+  ],
+  "jemanden erwischen": [
+    { de: "Die Lehrerin erwischte ihn beim Abschreiben.", en: "The teacher caught him copying." },
+    { de: "Wenn man beim Lügen erwischt wird, verliert man Vertrauen.", en: "If one is caught lying, one loses trust." }
+  ],
+  "zunächst": [
+    { de: "Zunächst war die Aufgabe leicht, später wurde sie komplizierter.", en: "At first the task was easy; later it became more complicated." },
+    { de: "Ich möchte zunächst die wichtigsten Wörter lernen.", en: "I first want to learn the most important words." }
+  ],
+  "das Hausverbot": [
+    { de: "Nach der Schlägerei bekam er ein Hausverbot im Club.", en: "After the fight he was banned from the club." },
+    { de: "Ein Hausverbot bedeutet, dass man den Ort nicht mehr betreten darf.", en: "A ban from premises means that one may no longer enter the place." }
+  ],
+  "nichts nützen": [
+    { de: "Es nützt nichts, nur über das Problem zu reden.", en: "It is no use only talking about the problem." },
+    { de: "Die Warnung nützte nichts; er kam trotzdem zu spät.", en: "The warning was of no use; he still came late." }
+  ],
+  "jemandem begegnen": [
+    { de: "Auf dem Weg zur Arbeit begegnete sie einer alten Freundin.", en: "On the way to work she met an old friend." },
+    { de: "In einer neuen Stadt begegnet man vielen unbekannten Situationen.", en: "In a new city one encounters many unfamiliar situations." }
+  ],
+  "erneut": [
+    { de: "Nach einer Woche versuchte er es erneut.", en: "After a week he tried it again." },
+    { de: "Die Frage wurde erneut gestellt, weil niemand geantwortet hatte.", en: "The question was asked again because nobody had answered." }
+  ],
+  "tatenlos": [
+    { de: "Sie wollte nicht tatenlos zusehen, wie andere litten.", en: "She did not want to watch passively while others suffered." },
+    { de: "Bei Gewalt darf man nicht tatenlos bleiben.", en: "In the face of violence one must not remain inactive." }
+  ],
+  "jemandem etwas beibringen": [
+    { de: "Meine Kollegin bringt mir die neue Software bei.", en: "My colleague teaches me the new software." },
+    { de: "Geduld ist wichtig, wenn man Kindern etwas beibringt.", en: "Patience is important when teaching children something." }
+  ],
+  "die Selbstbeherrschung": [
+    { de: "In einem Streit braucht man Selbstbeherrschung.", en: "In an argument one needs self-control." },
+    { de: "Sport kann Kindern Selbstbeherrschung beibringen.", en: "Sports can teach children self-control." }
+  ],
+  "die Verantwortung": [
+    { de: "Wer ein Team leitet, trägt Verantwortung.", en: "Whoever leads a team carries responsibility." },
+    { de: "Jugendliche lernen, Verantwortung für ihr Verhalten zu übernehmen.", en: "Young people learn to take responsibility for their behavior." }
+  ],
+  "selbstbewusst": [
+    { de: "Nach dem Kurs sprach sie selbstbewusster Deutsch.", en: "After the course she spoke German more confidently." },
+    { de: "Ein selbstbewusster Mensch kann Kritik besser annehmen.", en: "A self-confident person can accept criticism better." }
+  ],
+  "die Sozialforschung": [
+    { de: "Die Sozialforschung untersucht, wie Menschen zusammenleben.", en: "Social research examines how people live together." },
+    { de: "Er interessiert sich für Sozialforschung und gesellschaftliche Veränderungen.", en: "He is interested in social research and social changes." }
+  ],
+  "der Lebensentwurf": [
+    { de: "Nicht jeder Lebensentwurf passt zu klassischen Familienbildern.", en: "Not every life plan fits traditional family models." },
+    { de: "Viele junge Menschen entwickeln heute eigene Lebensentwürfe.", en: "Many young people today develop their own life plans." }
+  ],
+  "der Lebensverlauf": [
+    { de: "Der Lebensverlauf ist selten genau planbar.", en: "The course of life can rarely be planned exactly." },
+    { de: "Studien vergleichen Lebensverläufe verschiedener Generationen.", en: "Studies compare the life courses of different generations." }
+  ],
+  "die Befragten": [
+    { de: "Die Befragten antworteten anonym auf die Fragen.", en: "The respondents answered the questions anonymously." },
+    { de: "Mehr als die Hälfte der Befragten wünscht sich flexible Arbeitszeiten.", en: "More than half of the respondents want flexible working hours." }
+  ],
+  "bemerkenswert": [
+    { de: "Bemerkenswert ist, dass sich die Meinungen schnell verändert haben.", en: "It is remarkable that the opinions changed quickly." },
+    { de: "Seine Fortschritte nach nur zwei Monaten sind bemerkenswert.", en: "His progress after only two months is remarkable." }
+  ],
+  "der Wertewandel": [
+    { de: "Der Wertewandel zeigt sich besonders in der Arbeitswelt.", en: "The change in values is especially visible in working life." },
+    { de: "Durch den Wertewandel haben viele Menschen andere Erwartungen an Familie.", en: "Because of the change in values many people have different expectations of family." }
+  ],
+  "der Unterhalt": [
+    { de: "Nach der Trennung muss er Unterhalt für die Kinder zahlen.", en: "After the separation he has to pay support for the children." },
+    { de: "Viele Paare teilen sich heute den Unterhalt der Familie.", en: "Many couples today share providing for the family." }
+  ],
+  "eine Familie gründen": [
+    { de: "Sie möchten erst reisen und später eine Familie gründen.", en: "They want to travel first and start a family later." },
+    { de: "Eine Familie zu gründen verändert oft den Alltag.", en: "Starting a family often changes everyday life." }
+  ],
+  "von etwas abweichen": [
+    { de: "Der Plan weicht stark von unserer ursprünglichen Idee ab.", en: "The plan deviates strongly from our original idea." },
+    { de: "Manche Ergebnisse weichen von den Erwartungen ab.", en: "Some results differ from the expectations." }
+  ],
+  "die Vereinbarkeit": [
+    { de: "Die Vereinbarkeit von Studium und Arbeit ist nicht immer einfach.", en: "Combining university studies and work is not always easy." },
+    { de: "Flexible Arbeitszeiten verbessern die Vereinbarkeit von Familie und Beruf.", en: "Flexible working hours improve the ability to combine family and work." }
+  ],
+  "zurückhaltend": [
+    { de: "Im ersten Gespräch war sie noch sehr zurückhaltend.", en: "In the first conversation she was still very reserved." },
+    { de: "Der Chef reagierte zurückhaltend auf den Vorschlag.", en: "The boss reacted cautiously to the proposal." }
+  ],
+  "auf etwas eingehen": [
+    { de: "Die Lehrerin geht auf die Fragen der Klasse ein.", en: "The teacher responds to the class's questions." },
+    { de: "Im Brief geht er auf die Kritik der Leser ein.", en: "In the letter he addresses the readers' criticism." }
+  ],
+  "gefährdet": [
+    { de: "Ohne gute Planung ist das Projekt gefährdet.", en: "Without good planning the project is at risk." },
+    { de: "Ihre Gesundheit war durch den Stress gefährdet.", en: "Her health was endangered by the stress." }
+  ]
 };
-let state = loadState();
-let currentChapter = "k1";
-let currentLesson = "all";
-let studyPhase = "learn";
-let currentQuestion = null;
-let currentLearnItem = null;
-let selectedOption = null;
-let awaitingNext = false;
-let germanVoices = [];
-let learnBatch = [];
-let learnIndex = 0;
-let learnStage = "study";
-let drillQueue = [];
-let drillTotal = 0;
 
-const els = {
-  appTitle: document.querySelector("#appTitle"),
-  chapterNumber: document.querySelector("#chapterNumber"),
-  chapterTitle: document.querySelector("#chapterTitle"),
-  chapterSummary: document.querySelector("#chapterSummary"),
-  chapterTabs: document.querySelector("#chapterTabs"),
-  roundStep: document.querySelector("#roundStep"),
-  xp: document.querySelector("#xp"),
-  streak: document.querySelector("#streak"),
-  learned: document.querySelector("#learned"),
-  totalLearnWords: document.querySelector("#totalLearnWords"),
-  mastered: document.querySelector("#mastered"),
-  totalWords: document.querySelector("#totalWords"),
-  lessonList: document.querySelector("#lessonList"),
-  lessonKicker: document.querySelector("#lessonKicker"),
-  promptTitle: document.querySelector("#promptTitle"),
-  questionMeta: document.querySelector("#questionMeta"),
-  promptLabel: document.querySelector("#promptLabel"),
-  prompt: document.querySelector("#prompt"),
-  answerArea: document.querySelector("#answerArea"),
-  feedback: document.querySelector("#feedback"),
-  checkButton: document.querySelector("#checkButton"),
-  skipButton: document.querySelector("#skipButton"),
-  learnTab: document.querySelector("#learnTab"),
-  practiceTab: document.querySelector("#practiceTab"),
-  modeSelect: document.querySelector("#modeSelect"),
-  autoSpeak: document.querySelector("#autoSpeak"),
-  speechRate: document.querySelector("#speechRate"),
-  voiceSelect: document.querySelector("#voiceSelect"),
-  voiceStatus: document.querySelector("#voiceStatus"),
-  stageStudy: document.querySelector("#stageStudy"),
-  stageRecall: document.querySelector("#stageRecall"),
-  stageMix: document.querySelector("#stageMix"),
-  stageReview: document.querySelector("#stageReview"),
-  resetProgress: document.querySelector("#resetProgress"),
-  searchInput: document.querySelector("#searchInput"),
-  bankTitle: document.querySelector("#bankTitle"),
-  wordGrid: document.querySelector("#wordGrid"),
-  template: document.querySelector("#wordCardTemplate")
-};
+/* ============================================================
+   Aspekte B2 · Vokabeln — engine
+   (dataset above: chapters, lessons, vocab, exampleTranslations, curatedExamples)
+   ============================================================ */
 
+/* ---------- vocab factory helpers (used by dataset above, hoisted) ---------- */
 function w(lesson, term, type, translation, example, form, exampleEn = "", meta = {}) {
   const lessonMeta = lessons.find((entry) => entry.id === lesson);
   return {
@@ -649,883 +794,116 @@ function w(lesson, term, type, translation, example, form, exampleEn = "", meta 
     priority: meta.priority || "core"
   };
 }
-
 function h(lesson, term, type, translation, example, form, exampleEn, level = "B1.2/B2") {
   return w(lesson, term, type, translation, example, form, exampleEn, { priority: "focus", level });
 }
 
+/* ============================================================
+   State
+   ============================================================ */
+const STATE_KEY = "aspekte-b2-vocab-v2";
+const defaultState = {
+  xp: 0,
+  goal: 20,
+  sound: true,
+  heartsMode: true,
+  items: {},                       // id -> { seen, correct, wrong, mastery, due }
+  lessons: {},                     // lessonId -> { crown, sessions }
+  streak: { count: 0, lastDay: "" },
+  daily: { day: "", xp: 0 },
+  speech: { auto: true, rate: 0.85, voiceURI: "" }
+};
+
 function loadState() {
   try {
-    const saved = JSON.parse(localStorage.getItem(stateKey)) || {};
+    const saved = JSON.parse(localStorage.getItem(STATE_KEY)) || {};
     return {
       ...defaultState,
       ...saved,
       items: saved.items || {},
-      speech: {
-        ...defaultState.speech,
-        ...(saved.speech || {})
-      }
+      lessons: saved.lessons || {},
+      streak: { ...defaultState.streak, ...(saved.streak || {}) },
+      daily: { ...defaultState.daily, ...(saved.daily || {}) },
+      speech: { ...defaultState.speech, ...(saved.speech || {}) }
     };
   } catch {
-    return {
-      ...defaultState,
-      items: {},
-      speech: { ...defaultState.speech }
-    };
+    return JSON.parse(JSON.stringify(defaultState));
   }
 }
-
-function saveState() {
-  localStorage.setItem(stateKey, JSON.stringify(state));
-}
+function saveState() { localStorage.setItem(STATE_KEY, JSON.stringify(state)); }
 
 function itemState(id) {
-  if (!state.items[id]) state.items[id] = { seen: 0, correct: 0, wrong: 0, mastery: 0, due: 0, learned: false };
+  if (!state.items[id]) state.items[id] = { seen: 0, correct: 0, wrong: 0, mastery: 0, due: 0 };
   return state.items[id];
 }
-
-function initSpeechControls() {
-  els.autoSpeak.checked = Boolean(state.speech.auto);
-  els.speechRate.value = String(state.speech.rate);
-
-  if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
-    els.voiceStatus.textContent = "Speech is not available in this browser.";
-    els.autoSpeak.disabled = true;
-    els.speechRate.disabled = true;
-    els.voiceSelect.disabled = true;
-    return;
-  }
-
-  populateVoiceSelect();
-  window.speechSynthesis.onvoiceschanged = populateVoiceSelect;
+function lessonState(id) {
+  if (!state.lessons[id]) state.lessons[id] = { crown: 0, sessions: 0 };
+  return state.lessons[id];
 }
 
-function populateVoiceSelect() {
-  const voices = window.speechSynthesis.getVoices();
-  germanVoices = voices.filter((voice) => voice.lang.toLowerCase().startsWith("de"));
-  const current = state.speech.voiceURI;
-  els.voiceSelect.innerHTML = '<option value="">Best available German voice</option>';
+let state = loadState();
 
-  germanVoices.forEach((voice) => {
-    const option = document.createElement("option");
-    option.value = voice.voiceURI;
-    option.textContent = `${voice.name} (${voice.lang})`;
-    els.voiceSelect.appendChild(option);
-  });
+/* runtime */
+let currentChapter = "k1";
+let germanVoices = [];
+let bankFilter = "all";
+let session = null;   // active session or null
 
-  if (germanVoices.some((voice) => voice.voiceURI === current)) {
-    els.voiceSelect.value = current;
-  } else {
-    state.speech.voiceURI = "";
-    saveState();
-  }
+/* ============================================================
+   DOM references
+   ============================================================ */
+const $ = (sel) => document.querySelector(sel);
+const els = {
+  body: document.body,
+  hud: $("#hud"),
+  streakCount: $("#streakCount"),
+  goalArc: $("#goalArc"),
+  goalText: $("#goalText"),
+  hudGoal: $("#hudGoal"),
+  heartCount: $("#heartCount"),
+  hudHearts: $("#hudHearts"),
+  openSettings: $("#openSettings"),
+  home: $("#home"),
+  chapterTabs: $("#chapterTabs"),
+  heroCrest: $("#heroCrest"),
+  heroNumber: $("#heroNumber"),
+  heroTitle: $("#heroTitle"),
+  heroSummary: $("#heroSummary"),
+  heroCrownCount: $("#heroCrownCount"),
+  path: $("#path"),
+  session: $("#session"),
+  quitSession: $("#quitSession"),
+  sbarFill: $("#sbarFill"),
+  sessionHearts: $("#sessionHearts"),
+  stage: $("#stage"),
+  feedbackSheet: $("#feedbackSheet"),
+  primaryBtn: $("#primaryBtn"),
+  bank: $("#bank"),
+  bankMeta: $("#bankMeta"),
+  searchInput: $("#searchInput"),
+  bankChips: $("#bankChips"),
+  wordList: $("#wordList"),
+  bottomNav: $("#bottomNav"),
+  settingsModal: $("#settingsModal"),
+  profileStats: $("#profileStats"),
+  goalOptions: $("#goalOptions"),
+  soundToggle: $("#soundToggle"),
+  autoSpeak: $("#autoSpeak"),
+  speechRate: $("#speechRate"),
+  voiceSelect: $("#voiceSelect"),
+  voiceStatus: $("#voiceStatus"),
+  heartsToggle: $("#heartsToggle"),
+  resetProgress: $("#resetProgress"),
+  confetti: $("#confetti")
+};
 
-  els.voiceStatus.textContent = germanVoices.length
-    ? `${germanVoices.length} German voice${germanVoices.length === 1 ? "" : "s"} available.`
-    : "No German voice found. The browser will use its closest voice.";
+/* ============================================================
+   Small utilities
+   ============================================================ */
+function escapeHtml(v) {
+  return String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
-
-function selectedGermanVoice() {
-  return germanVoices.find((voice) => voice.voiceURI === state.speech.voiceURI)
-    || germanVoices.find((voice) => voice.lang.toLowerCase() === "de-de")
-    || germanVoices[0]
-    || null;
-}
-
-function speakGerman(text) {
-  if (!text || !("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) return;
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(cleanSpeechText(text));
-  utterance.lang = "de-DE";
-  utterance.rate = Number(state.speech.rate) || defaultState.speech.rate;
-  utterance.pitch = 1;
-  utterance.voice = selectedGermanVoice();
-  window.speechSynthesis.speak(utterance);
-}
-
-function cleanSpeechText(text) {
-  return String(text)
-    .replace(/\(.+?\)/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-function makeSpeakButton(label, text) {
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className = "speak-button";
-  button.dataset.speak = text;
-  button.textContent = label;
-  return button;
-}
-
-function currentChapterMeta() {
-  return chapters.find((chapter) => chapter.id === currentChapter) || chapters[0];
-}
-
-function chapterWords(chapterId = currentChapter) {
-  return vocab.filter((item) => item.chapter === chapterId);
-}
-
-function chapterLessons(chapterId = currentChapter) {
-  return lessons.filter((lesson) => lesson.chapter === chapterId);
-}
-
-function renderChapters() {
-  els.chapterTabs.innerHTML = "";
-  chapters.forEach((chapter) => {
-    const btn = document.createElement("button");
-    btn.className = "chapter-tab";
-    btn.type = "button";
-    btn.dataset.chapter = chapter.id;
-    btn.innerHTML = `<span>Kapitel ${chapter.number}</span><strong>${chapter.title}</strong>`;
-    btn.addEventListener("click", () => {
-      currentChapter = chapter.id;
-      currentLesson = "all";
-      learnBatch = [];
-      learnIndex = 0;
-      els.searchInput.value = "";
-      renderLessons();
-      startCurrentPhase();
-      updateStats();
-    });
-    els.chapterTabs.appendChild(btn);
-  });
-}
-
-function updateChapterPanel() {
-  const chapter = currentChapterMeta();
-  els.appTitle.textContent = `Kapitel ${chapter.number} Worttraining`;
-  els.chapterNumber.textContent = chapter.number;
-  els.chapterTitle.textContent = chapter.title;
-  els.chapterSummary.textContent = chapter.subtitle;
-  els.bankTitle.textContent = `Kapitel ${chapter.number} deck`;
-  document.title = `Kapitel ${chapter.number} Worttraining`;
-  document.querySelectorAll(".chapter-tab").forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.chapter === currentChapter);
-  });
-}
-
-function renderLessons() {
-  els.lessonList.innerHTML = "";
-  const chapter = currentChapterMeta();
-  const allButton = lessonButton({ id: "all", icon: chapter.number, title: `All Kapitel ${chapter.number}`, subtitle: `${chapterWords().length} items` });
-  els.lessonList.appendChild(allButton);
-  chapterLessons().forEach((lesson) => els.lessonList.appendChild(lessonButton(lesson)));
-}
-
-function lessonButton(lesson) {
-  const btn = document.createElement("button");
-  btn.className = "lesson-button";
-  btn.type = "button";
-  btn.dataset.lesson = lesson.id;
-  btn.innerHTML = `
-    <span class="lesson-icon">${lesson.icon}</span>
-    <span><span class="lesson-title">${lesson.title}</span><span class="lesson-count">${lesson.subtitle}</span></span>
-    <span class="lesson-progress">0</span>
-  `;
-  btn.addEventListener("click", () => {
-    currentLesson = lesson.id;
-    startCurrentPhase();
-    updateStats();
-  });
-  return btn;
-}
-
-function updateStats() {
-  const scopedWords = chapterWords();
-  const learned = scopedWords.filter((item) => isLearned(item)).length;
-  const mastered = scopedWords.filter((item) => itemState(item.id).mastery >= 4).length;
-  const currentRound = learnStage === "drill"
-    ? Math.min(learnBatchSize, learnBatch.length)
-    : Math.min(learnIndex + 1, Math.max(1, learnBatch.length));
-  els.roundStep.textContent = currentRound;
-  els.xp.textContent = state.xp;
-  els.streak.textContent = state.streak;
-  els.learned.textContent = learned;
-  els.totalLearnWords.textContent = scopedWords.length;
-  els.mastered.textContent = mastered;
-  els.totalWords.textContent = scopedWords.length;
-  els.learnTab.classList.toggle("active", studyPhase === "learn");
-  els.practiceTab.classList.toggle("active", studyPhase === "practice");
-  updateChapterPanel();
-  updateCycleStrip();
-
-  document.querySelectorAll(".lesson-button").forEach((btn) => {
-    const lessonId = btn.dataset.lesson;
-    btn.classList.toggle("active", lessonId === currentLesson);
-    const items = filterByLesson(lessonId);
-    const learnedInLesson = items.filter((item) => isLearned(item)).length;
-    const solid = items.filter((item) => itemState(item.id).mastery >= 4).length;
-    btn.querySelector(".lesson-progress").textContent = studyPhase === "learn"
-      ? `${learnedInLesson}/${items.length}`
-      : `${solid}/${items.length}`;
-  });
-  renderBank();
-}
-
-function updateCycleStrip() {
-  const stages = {
-    study: els.stageStudy,
-    recall: els.stageRecall,
-    mix: els.stageMix,
-    review: els.stageReview
-  };
-  Object.values(stages).forEach((node) => node.classList.remove("active", "done"));
-  if (studyPhase === "practice") {
-    stages.review.classList.add("active");
-    return;
-  }
-  if (learnStage === "study") {
-    stages.study.classList.add("active");
-    return;
-  }
-  if (learnStage === "drill") {
-    stages.study.classList.add("done");
-    stages.recall.classList.add("active");
-    stages.mix.classList.add("active");
-    return;
-  }
-  if (learnStage === "complete") {
-    stages.study.classList.add("done");
-    stages.recall.classList.add("done");
-    stages.mix.classList.add("done");
-    stages.review.classList.add("active");
-  }
-}
-
-function filterByLesson(lessonId = currentLesson) {
-  return lessonId === "all" ? chapterWords() : vocab.filter((item) => item.lesson === lessonId && item.chapter === currentChapter);
-}
-
-function getLessonTitle() {
-  if (currentLesson === "all") return `Kapitel ${currentChapterMeta().number}`;
-  return lessons.find((lesson) => lesson.id === currentLesson)?.title || "Lesson";
-}
-
-function isLearned(item) {
-  const s = itemState(item.id);
-  return s.learned || s.seen > 0;
-}
-
-function allCurrentWordsLearned() {
-  const items = filterByLesson();
-  return items.length > 0 && items.every((item) => isLearned(item));
-}
-
-function priorityScore(item) {
-  return item.priority === "focus" ? 0 : 1;
-}
-
-function lessonOrderScore(item) {
-  const index = lessons.findIndex((lesson) => lesson.id === item.lesson);
-  return index === -1 ? 999 : index;
-}
-
-function learningOrder(a, b) {
-  const sa = itemState(a.id);
-  const sb = itemState(b.id);
-  return priorityScore(a) - priorityScore(b)
-    || lessonOrderScore(a) - lessonOrderScore(b)
-    || sa.mastery - sb.mastery
-    || sa.seen - sb.seen;
-}
-
-function chooseLearnBatch() {
-  const pool = filterByLesson();
-  const fresh = pool.filter((item) => !isLearned(item)).sort(learningOrder).slice(0, learnBatchSize);
-  if (fresh.length >= learnBatchSize) return fresh;
-
-  const used = new Set(fresh.map((item) => item.id));
-  const weak = pool
-    .filter((item) => !used.has(item.id) && isLearned(item) && itemState(item.id).mastery < 4)
-    .sort((a, b) => priorityScore(a) - priorityScore(b) || itemState(a.id).mastery - itemState(b.id).mastery || itemState(a.id).due - itemState(b.id).due)
-    .slice(0, learnBatchSize - fresh.length);
-  return [...fresh, ...weak].length ? [...fresh, ...weak] : [...pool].sort(learningOrder).slice(0, learnBatchSize);
-}
-
-function chooseQuestionItem() {
-  const learnedPool = filterByLesson().filter((item) => isLearned(item));
-  if (!learnedPool.length) return null;
-  const now = Date.now();
-  const sorted = [...learnedPool].sort((a, b) => {
-    const sa = itemState(a.id);
-    const sb = itemState(b.id);
-    return (sa.due - now) - (sb.due - now) || priorityScore(a) - priorityScore(b) || sa.mastery - sb.mastery || Math.random() - 0.5;
-  });
-  return sorted[0] || null;
-}
-
-function chooseMode(item) {
-  const selected = els.modeSelect.value;
-  if (selected !== "mixed") return selected;
-  const candidates = ["meaning", "example", "typing", "cloze"];
-  if (item.type === "noun") candidates.push("article");
-  return candidates[Math.floor(Math.random() * candidates.length)];
-}
-
-function startQuestion() {
-  studyPhase = "practice";
-  currentLearnItem = null;
-  learnStage = "review";
-  selectedOption = null;
-  awaitingNext = false;
-  els.feedback.className = "feedback hidden";
-  els.checkButton.textContent = "Check";
-  const item = chooseQuestionItem();
-  if (!item) {
-    renderPracticeEmpty();
-    updateStats();
-    return;
-  }
-  const mode = chooseMode(item);
-  currentQuestion = buildQuestion(item, mode);
-  renderQuestion(currentQuestion);
-  updateStats();
-}
-
-function startLearn(resetBatch = true) {
-  studyPhase = "learn";
-  currentQuestion = null;
-  selectedOption = null;
-  awaitingNext = false;
-  els.feedback.className = "feedback hidden";
-  if (resetBatch || !learnBatch.length || learnIndex >= learnBatch.length) {
-    learnBatch = chooseLearnBatch();
-    learnIndex = 0;
-    drillQueue = [];
-    drillTotal = 0;
-  }
-  learnStage = "study";
-  currentLearnItem = learnBatch[learnIndex] || filterByLesson()[0] || vocab[0];
-  renderLearnItem(currentLearnItem);
-  updateStats();
-}
-
-function startCurrentPhase() {
-  if (studyPhase === "learn") startLearn();
-  else startQuestion();
-}
-
-function buildQuestion(item, mode) {
-  if (mode === "typing") {
-    return {
-      item,
-      mode,
-      title: "Type the German",
-      label: "Translate into German",
-      prompt: item.translation,
-      answer: item.term,
-      accepts: [item.term, stripArticle(item.term)],
-      type: "input"
-    };
-  }
-
-  if (mode === "article" && item.type === "noun") {
-    const article = item.term.split(" ")[0];
-    return {
-      item,
-      mode,
-      title: "Choose the article",
-      label: `What is the article for ${stripArticle(item.term)}?`,
-      prompt: stripArticle(item.term),
-      answer: article,
-      options: shuffle(["der", "die", "das"]).filter(Boolean),
-      type: "choice"
-    };
-  }
-
-  if (mode === "cloze") {
-    const practiceExample = choosePracticeExample(item);
-    const gap = makeGap(practiceExample.de, item.term);
-    if (!gap) {
-      return {
-        item,
-        mode: "typing",
-        title: "Type the German",
-        label: "Translate into German",
-        prompt: item.translation,
-        answer: item.term,
-        accepts: [item.term, stripArticle(item.term)],
-        type: "input"
-      };
-    }
-    return {
-      item,
-      mode,
-      title: "Complete the sentence",
-      label: practiceExample.en,
-      prompt: gap,
-      answer: item.term,
-      accepts: [item.term, stripArticle(item.term), firstVerb(item.term)],
-      example: practiceExample,
-      type: "input"
-    };
-  }
-
-  if (mode === "example") {
-    const practiceExample = choosePracticeExample(item);
-    const gap = makeGap(practiceExample.de, item.term) || practiceExample.de.replace(/"[^"]+"/, "_____");
-    return {
-      item,
-      mode,
-      title: "Pick the word for the sentence",
-      label: practiceExample.en,
-      prompt: gap,
-      answer: item.term,
-      options: makeTermOptions(item),
-      example: practiceExample,
-      type: "choice"
-    };
-  }
-
-  const options = makeOptions(item);
-  return {
-    item,
-    mode: "meaning",
-    title: "Choose the meaning",
-    label: item.form || item.type,
-    prompt: item.term,
-    answer: item.translation,
-    options,
-    type: "choice"
-  };
-}
-
-function chooseLearnDrillMode(item, position) {
-  if (position === 0) return "meaning";
-  if (item.type === "noun" && position % 3 === 1) return "article";
-  if (position % 3 === 2) return "cloze";
-  return "typing";
-}
-
-function startMiniPractice() {
-  learnStage = "drill";
-  selectedOption = null;
-  awaitingNext = false;
-  const items = learnBatch.length ? learnBatch : chooseLearnBatch();
-  drillQueue = shuffle(items.flatMap((item, index) => [
-    { item, mode: chooseLearnDrillMode(item, index) },
-    { item, mode: "example" },
-    { item, mode: index % 2 === 0 ? "typing" : "meaning" }
-  ]));
-  drillTotal = drillQueue.length;
-  nextLearnDrill();
-}
-
-function nextLearnDrill() {
-  selectedOption = null;
-  awaitingNext = false;
-  els.feedback.className = "feedback hidden";
-  if (!drillQueue.length) {
-    renderRoundComplete();
-    updateStats();
-    return;
-  }
-  const next = drillQueue.shift();
-  currentQuestion = buildQuestion(next.item, next.mode);
-  currentQuestion.context = "learn-drill";
-  renderQuestion(currentQuestion);
-  els.questionMeta.textContent = `${drillTotal - drillQueue.length}/${drillTotal} mini review`;
-  updateStats();
-}
-
-function renderQuestion(q) {
-  els.lessonKicker.textContent = getLessonTitle();
-  els.promptTitle.textContent = q.title;
-  els.questionMeta.textContent = q.item.type;
-  els.promptLabel.textContent = q.label;
-  els.prompt.textContent = q.prompt;
-  els.answerArea.innerHTML = "";
-  els.checkButton.textContent = "Check";
-  els.skipButton.textContent = "Skip";
-
-  if (q.mode === "meaning" || q.mode === "example" || q.mode === "cloze") {
-    const speechRow = document.createElement("div");
-    speechRow.className = "speech-actions";
-    speechRow.appendChild(makeSpeakButton("Listen", q.item.term));
-    els.answerArea.appendChild(speechRow);
-  }
-
-  if (q.type === "choice") {
-    q.options.forEach((option) => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "option-button";
-      btn.textContent = option;
-      btn.addEventListener("click", () => {
-        selectedOption = option;
-        document.querySelectorAll(".option-button").forEach((node) => node.classList.remove("selected"));
-        btn.classList.add("selected");
-      });
-      els.answerArea.appendChild(btn);
-    });
-  } else {
-    const input = document.createElement("input");
-    input.className = "text-answer";
-    input.type = "text";
-    input.autocomplete = "off";
-    input.spellcheck = false;
-    input.placeholder = "Type your answer";
-    input.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") handleCheck();
-    });
-    els.answerArea.appendChild(input);
-    input.focus();
-  }
-}
-
-function renderLearnItem(item) {
-  const items = filterByLesson();
-  const learnedCount = items.filter((entry) => isLearned(entry)).length;
-  const allLearned = learnedCount >= items.length;
-  const examples = learningExamples(item);
-  els.lessonKicker.textContent = getLessonTitle();
-  els.promptTitle.textContent = allLearned ? "Review weak words" : `Learn ${learnIndex + 1} of ${learnBatch.length}`;
-  els.questionMeta.textContent = `${learnedCount}/${items.length} learned`;
-  els.promptLabel.textContent = allLearned ? "All words are introduced. This round reviews weaker words." : "Study a small set, then you will immediately practice it.";
-  els.prompt.innerHTML = "";
-  els.answerArea.innerHTML = "";
-  els.feedback.className = "feedback hidden";
-  els.checkButton.textContent = learnIndex + 1 >= learnBatch.length ? "Start mini review" : "Next word";
-  els.skipButton.textContent = "Already know";
-
-  const lessonTitle = lessons.find((lesson) => lesson.id === item.lesson)?.title || "Kapitel 5";
-  els.prompt.innerHTML = `
-    <div class="learn-card">
-      <div class="learn-hero">
-        <div>
-          <div class="learn-term">${escapeHtml(item.term)}</div>
-          <div class="learn-translation">${escapeHtml(item.translation)}</div>
-        </div>
-        <div class="learn-badge">${escapeHtml(item.type)}</div>
-      </div>
-      <div class="learn-form">${escapeHtml([lessonTitle, item.level, item.priority === "focus" ? "focus word" : "", item.type, item.form].filter(Boolean).join(" | "))}</div>
-      <div class="example-stack">
-        ${examples.map((example, index) => `
-          <div class="learn-example">
-            <div class="example-number">${index + 1}</div>
-            <div>
-              <p class="example-de">${escapeHtml(example.de)}</p>
-              <p class="example-en">${escapeHtml(example.en)}</p>
-            </div>
-          </div>
-        `).join("")}
-      </div>
-      <div class="speech-actions">
-        <button class="speak-button" type="button" data-speak="${escapeAttr(item.term)}">Listen word</button>
-        <button class="speak-button" type="button" data-speak="${escapeAttr(examples[0].de)}">Listen example</button>
-      </div>
-    </div>
-  `;
-
-  if (!allLearned && state.speech.auto) {
-    window.setTimeout(() => speakGerman(item.term), 150);
-  }
-}
-
-function renderRoundComplete() {
-  learnStage = "complete";
-  currentQuestion = null;
-  const labels = learnBatch.map((item) => `<span>${escapeHtml(item.term)}</span>`).join("");
-  els.lessonKicker.textContent = getLessonTitle();
-  els.promptTitle.textContent = "Round complete";
-  els.questionMeta.textContent = `${learnBatch.length} words reviewed`;
-  els.promptLabel.textContent = "The next round adds a few new words and keeps weak words in rotation.";
-  els.prompt.innerHTML = `
-    <div class="round-complete">
-      <strong>Good. This small set has been practiced.</strong>
-      <div class="round-words">${labels}</div>
-      <p>Continue for the next small set, or switch to Practice for broader review.</p>
-    </div>
-  `;
-  els.answerArea.innerHTML = "";
-  els.feedback.className = "feedback hidden";
-  els.checkButton.textContent = "Next round";
-  els.skipButton.textContent = "Practice";
-}
-
-function renderPracticeEmpty() {
-  currentQuestion = null;
-  els.lessonKicker.textContent = getLessonTitle();
-  els.promptTitle.textContent = "Learn first";
-  els.questionMeta.textContent = "0 learned";
-  els.promptLabel.textContent = "Practice is locked until you introduce words.";
-  els.prompt.innerHTML = `
-    <div class="empty-state">
-      <strong>Start with Learn.</strong>
-      <span>Review the German word, English meaning, form, and example. After a few words are learned, Practice will quiz only those words.</span>
-    </div>
-  `;
-  els.answerArea.innerHTML = "";
-  els.feedback.className = "feedback hidden";
-  els.checkButton.textContent = "Learn now";
-  els.skipButton.textContent = "Skip";
-}
-
-function learningExamples(item) {
-  return [
-    {
-      de: item.example,
-      en: item.exampleEn || exampleTranslations[item.term] || `This sentence uses "${item.translation}" in context.`
-    }
-  ].concat(contextualExamples(item));
-}
-
-function contextualExamples(item) {
-  const focus = focusPhrase(item);
-  const lessonFrames = {
-    k1: [
-      [`In Gesprächen über Heimat hilft ${focus.de}, genauer zu erzählen.`, `In conversations about home, ${focus.en} helps you tell the story more precisely.`],
-      [`Beim Ankommen in einem neuen Land wird ${focus.de} schnell wichtig.`, `When arriving in a new country, ${focus.en} quickly becomes important.`],
-      [`Der Text verbindet ${focus.de} mit Identität und Alltag.`, `The text connects ${focus.en} with identity and daily life.`],
-      [`Für Menschen zwischen zwei Kulturen beschreibt ${focus.de} eine echte Erfahrung.`, `For people between two cultures, ${focus.en} describes a real experience.`]
-    ],
-    k2: [
-      [`In einem Gespräch verändert ${focus.de} oft die Wirkung.`, `In a conversation, ${focus.en} often changes the effect.`],
-      [`Beim Diskutieren kann ${focus.de} Missverständnisse vermeiden.`, `When discussing, ${focus.en} can prevent misunderstandings.`],
-      [`Der Ausdruck passt gut zu Kommunikation und Körpersprache.`, `The expression fits communication and body language well.`],
-      [`Mit ${focus.de} wird ein Konflikt leichter verständlich.`, `With ${focus.en}, a conflict becomes easier to understand.`]
-    ],
-    k3: [
-      [`Im Berufsleben spielt ${focus.de} eine praktische Rolle.`, `In professional life, ${focus.en} plays a practical role.`],
-      [`Bei einer Bewerbung kann ${focus.de} entscheidend sein.`, `In an application, ${focus.en} can be decisive.`],
-      [`Der Text nutzt ${focus.de}, um Arbeit realistischer zu beschreiben.`, `The text uses ${focus.en} to describe work more realistically.`],
-      [`In einem Team merkt man schnell, ob ${focus.de} wichtig ist.`, `In a team, one quickly notices whether ${focus.en} is important.`]
-    ],
-    k4: [
-      [`Beim Zusammenleben wird ${focus.de} zu einem sozialen Thema.`, `In living together, ${focus.en} becomes a social topic.`],
-      [`Der Artikel zeigt, wie ${focus.de} Menschen im Alltag betrifft.`, `The article shows how ${focus.en} affects people in daily life.`],
-      [`In einer Diskussion über Gesellschaft hilft ${focus.de}.`, `In a discussion about society, ${focus.en} helps.`],
-      [`Mit ${focus.de} kann man Probleme genauer benennen.`, `With ${focus.en}, one can name problems more precisely.`]
-    ],
-    science: [
-      [`Im Labor taucht ${focus.de} in der Diskussion auf.`, `In the lab, ${focus.en} comes up in the discussion.`],
-      [`Bei einem Experiment kann ${focus.de} den Unterschied machen.`, `In an experiment, ${focus.en} can make the difference.`],
-      [`Die Lehrerin notiert ${focus.de} an der Tafel.`, `The teacher writes ${focus.en} on the board.`],
-      [`Für junge Fachkräfte bleibt ${focus.de} ein Schlüsselwort.`, `For young professionals, ${focus.en} remains a key word.`]
-    ],
-    truth: [
-      [`In einem ehrlichen Gespräch fällt ${focus.de} sofort auf.`, `In an honest conversation, ${focus.en} stands out immediately.`],
-      [`Wenn Vertrauen fehlt, wird ${focus.de} schnell problematisch.`, `When trust is missing, ${focus.en} quickly becomes problematic.`],
-      [`Die Studie erklärt, warum ${focus.de} sozial wichtig sein kann.`, `The study explains why ${focus.en} can be socially important.`],
-      [`In einer Freundschaft sollte man ${focus.de} genau verstehen.`, `In a friendship, one should understand ${focus.en} precisely.`]
-    ],
-    future: [
-      [`Nach vielen Jahren wäre ${focus.de} noch sichtbar.`, `After many years, ${focus.en} would still be visible.`],
-      [`Ohne Menschen bekommt ${focus.de} eine neue Bedeutung.`, `Without humans, ${focus.en} takes on a new meaning.`],
-      [`In der verlassenen Stadt beschreibt ${focus.de} die Veränderung.`, `In the abandoned city, ${focus.en} describes the change.`],
-      [`Der Text benutzt ${focus.de}, um die Zukunft konkreter zu machen.`, `The text uses ${focus.en} to make the future more concrete.`]
-    ],
-    sleep: [
-      [`Nach einer kurzen Nacht spürt man ${focus.de} besonders stark.`, `After a short night, one feels ${focus.en} especially strongly.`],
-      [`Im Schlaflabor ist ${focus.de} kein kleines Detail.`, `In the sleep lab, ${focus.en} is not a small detail.`],
-      [`Wer müde ist, erkennt ${focus.de} sofort im Alltag.`, `Anyone who is tired recognizes ${focus.en} immediately in daily life.`],
-      [`Der Artikel verbindet ${focus.de} mit Gesundheit und Leistung.`, `The article connects ${focus.en} with health and performance.`]
-    ],
-    einstein: [
-      [`In Einsteins Biografie spielt ${focus.de} eine wichtige Rolle.`, `In Einstein's biography, ${focus.en} plays an important role.`],
-      [`Bei einer berühmten Entdeckung wird ${focus.de} zentral.`, `In a famous discovery, ${focus.en} becomes central.`],
-      [`Der Text zeigt, wie ${focus.de} eine Entscheidung beeinflusst.`, `The text shows how ${focus.en} influences a decision.`],
-      [`Für Wissenschaft und Politik ist ${focus.de} hier wichtig.`, `For science and politics, ${focus.en} is important here.`]
-    ],
-    smell: [
-      [`Beim Betreten des Raums nimmt man ${focus.de} sofort wahr.`, `When entering the room, one notices ${focus.en} immediately.`],
-      [`In der Werbung kann ${focus.de} Gefühle auslösen.`, `In advertising, ${focus.en} can trigger feelings.`],
-      [`Der Geruch im Alltag macht ${focus.de} leichter merkbar.`, `The everyday smell makes ${focus.en} easier to remember.`],
-      [`In dieser Lektion hilft ${focus.de}, Nuancen zu beschreiben.`, `In this lesson, ${focus.en} helps describe nuances.`]
-    ]
-  };
-  const frames = lessonFrames[item.lesson] || lessonFrames[item.chapter] || lessonFrames.science;
-  const start = stableIndex(item.id, frames.length);
-  return [frames[start], frames[(start + 2) % frames.length]].map(([de, en]) => ({ de, en }));
-}
-
-function focusPhrase(item) {
-  const meaning = shortMeaning(item);
-  if (item.type === "noun" && /^(der|die|das)\s/i.test(item.term) && !/\ban$/.test(item.term)) {
-    return { de: item.term, en: `the idea of "${meaning}"` };
-  }
-  const label = item.type === "verb" ? "das Verb" : item.type === "adj" ? "das Adjektiv" : "der Ausdruck";
-  return { de: `${label} "${item.term}"`, en: `"${meaning}"` };
-}
-
-function shortMeaning(item) {
-  return item.translation.split(";")[0].trim();
-}
-
-function stableIndex(value, modulo) {
-  let total = 0;
-  for (let index = 0; index < value.length; index += 1) total += value.charCodeAt(index);
-  return total % modulo;
-}
-
-function choosePracticeExample(item) {
-  const examples = learningExamples(item);
-  return examples[stableIndex(`${item.id}-${itemState(item.id).seen}`, examples.length)] || examples[0];
-}
-
-function makeOptions(item) {
-  const wrong = shuffle(vocab.filter((other) => other.id !== item.id && other.lesson === item.lesson))
-    .slice(0, 2)
-    .map((other) => other.translation);
-  while (wrong.length < 3) {
-    const candidate = vocab[Math.floor(Math.random() * vocab.length)].translation;
-    if (candidate !== item.translation && !wrong.includes(candidate)) wrong.push(candidate);
-  }
-  return shuffle([item.translation, ...wrong.slice(0, 3)]);
-}
-
-function makeTermOptions(item) {
-  const wrong = shuffle(vocab.filter((other) => other.id !== item.id && other.lesson === item.lesson))
-    .slice(0, 3)
-    .map((other) => other.term);
-  while (wrong.length < 3) {
-    const candidate = vocab[Math.floor(Math.random() * vocab.length)].term;
-    if (candidate !== item.term && !wrong.includes(candidate)) wrong.push(candidate);
-  }
-  return shuffle([item.term, ...wrong.slice(0, 3)]);
-}
-
-function handleCheck() {
-  if (studyPhase === "learn") {
-    if (learnStage === "complete") {
-      startLearn(true);
-      return;
-    }
-    if (learnStage === "drill") {
-      if (!currentQuestion) {
-        nextLearnDrill();
-        return;
-      }
-      if (awaitingNext) {
-        nextLearnDrill();
-        return;
-      }
-
-      let answer = selectedOption;
-      if (currentQuestion.type === "input") {
-        answer = els.answerArea.querySelector("input").value;
-      }
-      const correct = isCorrect(answer, currentQuestion);
-      recordAnswer(currentQuestion.item, correct);
-      showFeedback(correct, answer);
-      awaitingNext = true;
-      els.checkButton.textContent = "Next";
-      updateStats();
-      return;
-    }
-    if (allCurrentWordsLearned()) {
-      startMiniPractice();
-      return;
-    }
-    markLearned(currentLearnItem, false);
-    learnIndex += 1;
-    if (learnIndex >= learnBatch.length) startMiniPractice();
-    else startLearn(false);
-    return;
-  }
-
-  if (!currentQuestion) {
-    startLearn();
-    return;
-  }
-  if (awaitingNext) {
-    startQuestion();
-    return;
-  }
-
-  let answer = selectedOption;
-  if (currentQuestion.type === "input") {
-    answer = els.answerArea.querySelector("input").value;
-  }
-  const correct = isCorrect(answer, currentQuestion);
-  recordAnswer(currentQuestion.item, correct);
-  showFeedback(correct, answer);
-  awaitingNext = true;
-  els.checkButton.textContent = "Next";
-  updateStats();
-}
-
-function markLearned(item, alreadyKnown) {
-  if (!item) return;
-  const s = itemState(item.id);
-  if (!isLearned(item)) state.xp += alreadyKnown ? 6 : 4;
-  s.learned = true;
-  s.seen = Math.max(1, s.seen);
-  s.mastery = Math.max(s.mastery, alreadyKnown ? 2 : 1);
-  s.due = Date.now();
-  saveState();
-}
-
-function isCorrect(answer, q) {
-  if (!answer) return false;
-  if (q.type === "choice") return answer === q.answer;
-  const normalized = normalize(answer);
-  return q.accepts.some((accepted) => normalize(accepted) === normalized);
-}
-
-function recordAnswer(item, correct) {
-  const s = itemState(item.id);
-  s.seen += 1;
-  if (correct) {
-    s.correct += 1;
-    s.mastery = Math.min(5, s.mastery + 1);
-    s.due = Date.now() + reviewInterval(item, s.mastery);
-    state.xp += 10;
-    state.streak += 1;
-  } else {
-    s.wrong += 1;
-    s.mastery = Math.max(0, s.mastery - 1);
-    s.due = Date.now() + (item.priority === "focus" ? 8_000 : 20_000);
-    state.streak = 0;
-  }
-  saveState();
-}
-
-function reviewInterval(item, mastery) {
-  const steps = item.priority === "focus"
-    ? [25_000, 60_000, 140_000, 360_000, 900_000, 1_800_000]
-    : [60_000, 150_000, 360_000, 900_000, 1_800_000, 3_600_000];
-  return steps[Math.min(mastery, steps.length - 1)];
-}
-
-function showFeedback(correct, answer) {
-  const item = currentQuestion.item;
-  const example = currentQuestion.example || learningExamples(item)[0];
-  els.feedback.className = `feedback ${correct ? "correct" : "wrong"}`;
-  els.feedback.innerHTML = correct
-    ? `<strong>Correct.</strong> ${item.term} = ${item.translation}<br>${example.de}<br><span class="feedback-translation">${example.en}</span><br><button class="speak-button" type="button" data-speak="${escapeAttr(item.term)}">Listen answer</button>`
-    : `<strong>Not yet.</strong> Correct answer: ${currentQuestion.answer}<br>${item.term} = ${item.translation}<br>${example.de}<br><span class="feedback-translation">${example.en}</span><br><button class="speak-button" type="button" data-speak="${escapeAttr(item.term)}">Listen answer</button>`;
-}
-
-function makeGap(example, term) {
-  const candidates = [term, stripArticle(term), firstVerb(term)].filter(Boolean).sort((a, b) => b.length - a.length);
-  let sentence = example;
-  for (const candidate of candidates) {
-    const escaped = candidate.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const next = sentence.replace(new RegExp(escaped, "i"), "_____");
-    if (next !== sentence) return next;
-  }
-  return null;
-}
-
-function stripArticle(term) {
-  return term.replace(/^(der|die|das|eine|ein|einen|einem)\s+/i, "").trim();
-}
-
-function firstVerb(term) {
-  return term.split(" ").find((part) => /en$|eln$|ern$/.test(part)) || stripArticle(term);
-}
-
-function normalize(value) {
-  return String(value)
-    .toLowerCase()
-    .replace(/[.,;:!?()"']/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
+function escapeAttr(v) { return escapeHtml(v).replace(/'/g, "&#39;"); }
 function shuffle(items) {
   const copy = [...items];
   for (let i = copy.length - 1; i > 0; i -= 1) {
@@ -1534,95 +912,961 @@ function shuffle(items) {
   }
   return copy;
 }
+function normalize(v) {
+  return String(v).toLowerCase()
+    .replace(/[.,;:!?()"'„“”]/g, "")
+    .replace(/\s+/g, " ").trim();
+}
+function stripArticle(term) {
+  return term.replace(/^(der|die|das|eine|einen|einem|einer|ein)\s+/i, "").trim();
+}
+function firstVerb(term) {
+  return term.split(" ").find((p) => /en$|eln$|ern$/.test(p)) || stripArticle(term);
+}
+function makeGap(sentence, term) {
+  const cands = [term, stripArticle(term), firstVerb(term)].filter(Boolean).sort((a, b) => b.length - a.length);
+  for (const c of cands) {
+    const esc = c.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const next = sentence.replace(new RegExp(esc, "i"), '<span class="gap">_____</span>');
+    if (next !== sentence) return next;
+  }
+  return null;
+}
+function cleanSpeechText(text) {
+  return String(text).replace(/\(.+?\)/g, "").replace(/\s+/g, " ").trim();
+}
+function pad2(n) { return String(n).padStart(2, "0"); }
+function dayStr(d) { return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`; }
+function todayStr() { return dayStr(new Date()); }
+function yesterdayStr() { const d = new Date(); d.setDate(d.getDate() - 1); return dayStr(d); }
 
-function escapeHtml(value) {
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+/* ============================================================
+   Dataset helpers
+   ============================================================ */
+function chapterMeta(id = currentChapter) { return chapters.find((c) => c.id === id) || chapters[0]; }
+function chapterWords(id = currentChapter) { return vocab.filter((v) => v.chapter === id); }
+function chapterLessons(id = currentChapter) { return lessons.filter((l) => l.chapter === id); }
+function lessonWords(lessonId) { return vocab.filter((v) => v.lesson === lessonId); }
+
+function learningExamples(item) {
+  const base = [{
+    de: item.example,
+    en: item.exampleEn || exampleTranslations[item.term] || `Uses “${item.translation}” in context.`
+  }];
+  return base.concat(curatedExamples[item.term] || []);
+}
+function stableIndex(value, modulo) {
+  let total = 0;
+  for (let i = 0; i < value.length; i += 1) total += value.charCodeAt(i);
+  return modulo ? total % modulo : 0;
+}
+function choosePracticeExample(item) {
+  const ex = learningExamples(item);
+  return ex[stableIndex(`${item.id}-${itemState(item.id).seen}`, ex.length)] || ex[0];
+}
+function makeOptions(item) {
+  const pool = shuffle(vocab.filter((o) => o.id !== item.id && o.lesson === item.lesson)).slice(0, 3).map((o) => o.translation);
+  while (pool.length < 3) {
+    const c = vocab[Math.floor(Math.random() * vocab.length)].translation;
+    if (c !== item.translation && !pool.includes(c)) pool.push(c);
+  }
+  return shuffle([item.translation, ...pool.slice(0, 3)]);
+}
+function makeTermOptions(item) {
+  const pool = shuffle(vocab.filter((o) => o.id !== item.id && o.lesson === item.lesson)).slice(0, 3).map((o) => o.term);
+  while (pool.length < 3) {
+    const c = vocab[Math.floor(Math.random() * vocab.length)].term;
+    if (c !== item.term && !pool.includes(c)) pool.push(c);
+  }
+  return shuffle([item.term, ...pool.slice(0, 3)]);
 }
 
-function escapeAttr(value) {
-  return escapeHtml(value).replace(/'/g, "&#39;");
-}
+/* ============================================================
+   Progress helpers
+   ============================================================ */
+function isLearned(item) { return itemState(item.id).seen > 0; }
+function speechAvailable() { return "speechSynthesis" in window && "SpeechSynthesisUtterance" in window; }
 
-function renderBank() {
-  const query = normalize(els.searchInput.value || "");
-  const filtered = filterByLesson().filter((item) => {
-    const haystack = normalize(`${item.term} ${item.translation} ${item.form} ${item.example}`);
-    return haystack.includes(query);
-  });
-  els.wordGrid.innerHTML = "";
-  filtered.forEach((item) => {
-    const node = els.template.content.firstElementChild.cloneNode(true);
-    const s = itemState(item.id);
-    const example = learningExamples(item)[0];
-    node.querySelector(".tag").textContent = lessons.find((lesson) => lesson.id === item.lesson)?.title || item.lesson;
-    node.querySelector("h3").textContent = item.term;
-    node.querySelector(".meta").textContent = [item.level, item.priority === "focus" ? "focus" : "", item.type, item.form].filter(Boolean).join(" | ");
-    node.querySelector(".translation").textContent = item.translation;
-    node.querySelector(".example").innerHTML = `${escapeHtml(example.de)}<br><span>${escapeHtml(example.en)}</span>`;
-    node.querySelector(".word-card-top").appendChild(makeSpeakButton("Listen", item.term));
-    const dot = node.querySelector(".mastery-dot");
-    dot.classList.toggle("strong", s.mastery >= 4);
-    dot.classList.toggle("new", !isLearned(item));
-    els.wordGrid.appendChild(node);
-  });
+function ensureDaily() {
+  const t = todayStr();
+  if (state.daily.day !== t) { state.daily = { day: t, xp: 0 }; saveState(); }
 }
+function addXp(n) {
+  ensureDaily();
+  state.xp += n;
+  state.daily.xp += n;
+  saveState();
+  updateHud();
+}
+function registerStreak() {
+  const t = todayStr();
+  if (state.streak.lastDay === t) return;
+  state.streak.count = state.streak.lastDay === yesterdayStr() ? state.streak.count + 1 : 1;
+  state.streak.lastDay = t;
+  saveState();
+}
+function levelFor(xp) { return Math.floor(xp / 120) + 1; }
 
-els.checkButton.addEventListener("click", handleCheck);
-els.skipButton.addEventListener("click", () => {
-  if (studyPhase === "learn") {
-    if (learnStage === "complete") {
-      startQuestion();
-      return;
-    }
-    if (learnStage === "drill") {
-      nextLearnDrill();
-      return;
-    }
-    markLearned(currentLearnItem, true);
-    learnIndex += 1;
-    if (learnIndex >= learnBatch.length) startMiniPractice();
-    else startLearn(false);
+function recordAnswer(item, correct) {
+  const s = itemState(item.id);
+  s.seen += 1;
+  if (correct) {
+    s.correct += 1;
+    s.mastery = Math.min(5, s.mastery + 1);
+    s.due = Date.now() + reviewInterval(item, s.mastery);
   } else {
-    startQuestion();
+    s.wrong += 1;
+    s.mastery = Math.max(0, s.mastery - 1);
+    s.due = Date.now() + (item.priority === "focus" ? 8000 : 20000);
+  }
+  saveState();
+}
+function reviewInterval(item, mastery) {
+  const steps = [45000, 120000, 300000, 900000, 2400000, 6000000];
+  return steps[Math.min(mastery, steps.length - 1)];
+}
+
+/* ============================================================
+   Speech
+   ============================================================ */
+function initSpeech() {
+  els.autoSpeak.checked = Boolean(state.speech.auto);
+  els.soundToggle.checked = Boolean(state.sound);
+  els.heartsToggle.checked = Boolean(state.heartsMode);
+  els.speechRate.value = String(state.speech.rate);
+  if (!speechAvailable()) {
+    els.voiceStatus.textContent = "Speech is not available in this browser.";
+    els.autoSpeak.disabled = true; els.speechRate.disabled = true; els.voiceSelect.disabled = true;
+    return;
+  }
+  populateVoices();
+  window.speechSynthesis.onvoiceschanged = populateVoices;
+}
+function populateVoices() {
+  const voices = window.speechSynthesis.getVoices();
+  germanVoices = voices.filter((v) => v.lang.toLowerCase().startsWith("de"));
+  const current = state.speech.voiceURI;
+  els.voiceSelect.innerHTML = '<option value="">Best available</option>';
+  germanVoices.forEach((v) => {
+    const o = document.createElement("option");
+    o.value = v.voiceURI; o.textContent = `${v.name} (${v.lang})`;
+    els.voiceSelect.appendChild(o);
+  });
+  if (germanVoices.some((v) => v.voiceURI === current)) els.voiceSelect.value = current;
+  else { state.speech.voiceURI = ""; }
+  els.voiceStatus.textContent = germanVoices.length
+    ? `${germanVoices.length} German voice${germanVoices.length === 1 ? "" : "s"} available.`
+    : "No German voice found — the browser will use its closest voice.";
+}
+function selectedVoice() {
+  return germanVoices.find((v) => v.voiceURI === state.speech.voiceURI)
+    || germanVoices.find((v) => v.lang.toLowerCase() === "de-de")
+    || germanVoices[0] || null;
+}
+function speak(text) {
+  if (!text || !speechAvailable()) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(cleanSpeechText(text));
+  u.lang = "de-DE";
+  u.rate = Number(state.speech.rate) || 0.85;
+  u.voice = selectedVoice();
+  window.speechSynthesis.speak(u);
+}
+
+/* ============================================================
+   Sound effects (Web Audio, no assets)
+   ============================================================ */
+let actx = null;
+function audio() {
+  if (!state.sound) return null;
+  try { if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)(); } catch { return null; }
+  if (actx.state === "suspended") actx.resume();
+  return actx;
+}
+function tone(freq, start, dur, vol = 0.18, type = "sine") {
+  const ctx = audio(); if (!ctx) return;
+  const t0 = ctx.currentTime + start;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type; osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0, t0);
+  gain.gain.linearRampToValueAtTime(vol, t0 + 0.012);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(t0); osc.stop(t0 + dur + 0.02);
+}
+function sndCorrect() { tone(587.33, 0, 0.12); tone(880, 0.08, 0.18); }
+function sndWrong() { tone(196, 0, 0.22, 0.16, "sawtooth"); tone(155.56, 0.06, 0.26, 0.14, "sawtooth"); }
+function sndFanfare() { [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, i * 0.11, 0.32, 0.16, "triangle")); }
+
+/* ============================================================
+   View switching
+   ============================================================ */
+function setView(view) {
+  if (view !== "session" && session) session = null;
+  els.body.dataset.view = view;
+  els.hud.hidden = view === "session";
+  els.bottomNav.hidden = view === "session";
+  els.home.hidden = view !== "home";
+  els.bank.hidden = view !== "bank";
+  els.session.hidden = view !== "session";
+  els.bottomNav.querySelectorAll(".nav-btn").forEach((b) => {
+    b.classList.toggle("active", b.dataset.nav === (view === "bank" ? "bank" : "home"));
+  });
+  window.scrollTo(0, 0);
+}
+
+/* ============================================================
+   HUD + Home
+   ============================================================ */
+function updateHud() {
+  ensureDaily();
+  els.streakCount.textContent = state.streak.count;
+  const pct = Math.max(0, Math.min(1, state.goal ? state.daily.xp / state.goal : 1));
+  const circ = 2 * Math.PI * 15.5;
+  els.goalArc.style.strokeDashoffset = String(circ * (1 - pct));
+  els.goalText.textContent = `${state.daily.xp}/${state.goal}`;
+  els.heartCount.textContent = state.heartsMode ? "5" : "∞";
+  els.hudHearts.classList.toggle("spent", !state.heartsMode);
+}
+
+function renderChapterTabs() {
+  els.chapterTabs.innerHTML = "";
+  chapters.forEach((c) => {
+    const btn = document.createElement("button");
+    btn.className = "chapter-tab" + (c.id === currentChapter ? " active" : "");
+    btn.type = "button";
+    btn.innerHTML = `<small>Kap.</small><b>${c.number}</b>`;
+    btn.addEventListener("click", () => { currentChapter = c.id; renderHome(); });
+    els.chapterTabs.appendChild(btn);
+  });
+}
+
+function renderHome() {
+  renderChapterTabs();
+  const c = chapterMeta();
+  const cls = chapterLessons();
+  els.heroCrest.textContent = c.number;
+  els.heroNumber.textContent = c.number;
+  els.heroTitle.textContent = c.title;
+  els.heroSummary.textContent = c.subtitle;
+  const crownTotal = cls.reduce((sum, l) => sum + lessonState(l.id).crown, 0);
+  els.heroCrownCount.textContent = crownTotal;
+
+  els.path.innerHTML = "";
+  const firstUnfinished = cls.findIndex((l) => lessonState(l.id).crown < 5);
+  cls.forEach((lesson, i) => {
+    const words = lessonWords(lesson.id);
+    const ls = lessonState(lesson.id);
+    const learned = words.filter(isLearned).length;
+    const learnedPct = words.length ? Math.round((learned / words.length) * 100) : 0;
+    const done = ls.crown >= 5;
+    const started = ls.crown > 0 || learned > 0;
+    const isCurrent = i === firstUnfinished;
+
+    const row = document.createElement("div");
+    row.className = "path-row" + (isCurrent ? " current" : "");
+    row.style.transform = `translateX(${Math.round(Math.sin(i * 0.9) * 62)}px)`;
+
+    const bubble = isCurrent
+      ? `<div class="start-bubble">${started ? "Continue" : "Start"}</div>` : "";
+    const crownBadge = ls.crown > 0
+      ? `<span class="node-crown"><span>👑</span>${ls.crown}</span>` : "";
+
+    row.innerHTML = `
+      ${bubble}
+      <button class="node ${done ? "done" : started ? "started" : ""}" type="button" aria-label="${escapeAttr(lesson.title)}">
+        <span class="node-ring" style="--p:${done ? 100 : learnedPct}"></span>
+        <span class="node-face">${lesson.icon || "•"}</span>
+        ${crownBadge}
+      </button>
+      <div class="node-label">${escapeHtml(lesson.title)}</div>
+      <div class="node-sub">${done ? "Mastered · " : ""}${learned}/${words.length} words</div>`;
+    row.querySelector(".node").addEventListener("click", () => startLessonSession(lesson.id));
+    els.path.appendChild(row);
+  });
+
+  // Chapter review node
+  const learnedInChapter = chapterWords().filter(isLearned).length;
+  const reviewRow = document.createElement("div");
+  reviewRow.className = "path-row";
+  reviewRow.style.transform = "translateX(0)";
+  reviewRow.innerHTML = `
+    <button class="node review-node" type="button" aria-label="Mixed review">
+      <span class="node-face">🏋️</span>
+    </button>
+    <div class="node-label">Mixed review</div>
+    <div class="node-sub">${learnedInChapter ? "Refresh weak words" : "Learn some words first"}</div>`;
+  reviewRow.querySelector(".node").addEventListener("click", () => startPracticeSession(currentChapter));
+  els.path.appendChild(reviewRow);
+
+  updateHud();
+}
+
+/* ============================================================
+   Question building
+   ============================================================ */
+function pickModes(item, crown, count) {
+  const noun = item.type === "noun";
+  const canListen = speechAvailable();
+  let bag;
+  if (crown <= 0) bag = ["meaning", "reverse", noun ? "article" : "meaning"];
+  else if (crown === 1) bag = ["meaning", "reverse", "typing", noun ? "article" : "cloze", "cloze"];
+  else if (crown <= 3) bag = ["typing", "cloze", "reverse", noun ? "article" : "typing", canListen ? "listen" : "meaning"];
+  else bag = ["typing", "cloze", canListen ? "listen" : "typing", "typing", noun ? "article" : "cloze"];
+  const picked = shuffle(bag);
+  const out = [];
+  for (const m of picked) { if (!out.includes(m)) out.push(m); if (out.length >= count) break; }
+  while (out.length < count) out.push(picked[out.length % picked.length]);
+  return out.slice(0, count);
+}
+
+function buildQuestion(item, mode) {
+  if (mode === "article" && item.type === "noun") {
+    const article = item.term.split(" ")[0];
+    if (["der", "die", "das"].includes(article.toLowerCase())) {
+      return {
+        item, mode, kind: "choice",
+        title: "Which article?", sub: item.type,
+        promptHtml: `<div class="prompt-bubble center">${escapeHtml(stripArticle(item.term))}</div>`,
+        speak: item.term,
+        answer: article, options: ["der", "die", "das"]
+      };
+    }
+    mode = "meaning";
+  }
+  if (mode === "typing") {
+    return {
+      item, mode, kind: "input",
+      title: "Write it in German", sub: item.type,
+      promptHtml: `<div class="prompt-bubble center">${escapeHtml(item.translation)}</div>`,
+      speak: null,
+      answer: item.term, accepts: [item.term, stripArticle(item.term)]
+    };
+  }
+  if (mode === "cloze") {
+    const ex = choosePracticeExample(item);
+    const gap = makeGap(ex.de, item.term);
+    if (!gap) return buildQuestion(item, "typing");
+    return {
+      item, mode, kind: "input",
+      title: "Fill the gap", sub: ex.en,
+      promptHtml: `<div class="prompt-bubble prompt-cloze">${gap}</div>`,
+      speak: null,
+      answer: item.term, accepts: [item.term, stripArticle(item.term), firstVerb(item.term)],
+      example: ex
+    };
+  }
+  if (mode === "listen" && speechAvailable()) {
+    return {
+      item, mode, kind: "choice",
+      title: "What did you hear?", sub: "Tap the meaning",
+      promptHtml: `<div class="prompt-box"><button class="prompt-speaker big" type="button" data-speak="${escapeAttr(item.term)}">🔊</button><div class="prompt-hint">Listen and choose the meaning</div></div>`,
+      speak: item.term, autospeak: true,
+      answer: item.translation, options: makeOptions(item)
+    };
+  }
+  if (mode === "reverse") {
+    return {
+      item, mode, kind: "choice",
+      title: "Choose the German word", sub: "",
+      promptHtml: `<div class="prompt-bubble center">${escapeHtml(item.translation)}</div>`,
+      speak: null,
+      answer: item.term, options: makeTermOptions(item)
+    };
+  }
+  // default: meaning
+  return {
+    item, mode: "meaning", kind: "choice",
+    title: "Choose the meaning", sub: item.form || item.type,
+    promptHtml: `<div class="prompt-box"><button class="prompt-speaker" type="button" data-speak="${escapeAttr(item.term)}">🔊</button><div class="prompt-bubble">${escapeHtml(item.term)}</div></div>`,
+    speak: item.term,
+    answer: item.translation, options: makeOptions(item)
+  };
+}
+
+function isCorrect(answer, q) {
+  if (answer == null || answer === "") return false;
+  if (q.kind === "choice") return answer === q.answer;
+  const n = normalize(answer);
+  return q.accepts.some((a) => normalize(a) === n);
+}
+
+/* ============================================================
+   Session engine
+   ============================================================ */
+function learningOrder(a, b) {
+  const pa = a.priority === "focus" ? 0 : 1;
+  const pb = b.priority === "focus" ? 0 : 1;
+  const sa = itemState(a.id), sb = itemState(b.id);
+  return (pa - pb) || (sa.mastery - sb.mastery) || (sa.seen - sb.seen);
+}
+
+function startLessonSession(lessonId) {
+  const lesson = lessons.find((l) => l.id === lessonId);
+  const words = [...lessonWords(lessonId)].sort(learningOrder);
+  const crown = lessonState(lessonId).crown;
+  const queue = [];
+  let slot = 0;
+  const MAX_NEW = 8;
+  let introduced = 0;
+
+  words.forEach((item) => {
+    const fresh = !isLearned(item);
+    if (fresh && introduced < MAX_NEW) {
+      introduced += 1;
+      queue.push({ type: "teach", item, slot: slot++ });
+      pickModes(item, 0, 2).forEach((mode) => queue.push({ type: "q", item, mode, slot: slot++ }));
+    } else if (!fresh) {
+      pickModes(item, crown, crown >= 2 ? 2 : 1).forEach((mode) => queue.push({ type: "q", item, mode, slot: slot++ }));
+    }
+  });
+
+  // If nothing new and nothing seen (shouldn't happen), still teach first words
+  if (!queue.length && words.length) {
+    words.slice(0, MAX_NEW).forEach((item) => {
+      queue.push({ type: "teach", item, slot: slot++ });
+      pickModes(item, 0, 2).forEach((mode) => queue.push({ type: "q", item, mode, slot: slot++ }));
+    });
+  }
+
+  // Mixed review tail over the words that appeared
+  const appeared = [...new Set(queue.map((s) => s.item))];
+  const tail = shuffle(appeared).map((item) => ({ type: "q", item, mode: pickModes(item, Math.max(1, crown), 1)[0], slot: slot++ }));
+  queue.push(...tail);
+
+  launchSession({ kind: "lesson", lessonId, chapterId: lesson.chapter, title: lesson.title, crown, queue });
+}
+
+function startPracticeSession(chapterId) {
+  const learned = chapterWords(chapterId).filter(isLearned);
+  if (learned.length < 1) {
+    // nothing to practice — gently redirect
+    setView("home");
+    return;
+  }
+  const ordered = [...learned].sort((a, b) => (itemState(a.id).due - itemState(b.id).due) || (itemState(a.id).mastery - itemState(b.id).mastery));
+  const pool = ordered.slice(0, 16);
+  let slot = 0;
+  const queue = shuffle(pool).map((item) => ({
+    type: "q", item, mode: pickModes(item, Math.max(2, itemState(item.id).mastery), 1)[0], slot: slot++
+  }));
+  launchSession({ kind: "practice", chapterId, title: "Mixed review", queue });
+}
+
+function launchSession(base) {
+  const total = base.queue.length;
+  session = {
+    ...base,
+    pos: 0,
+    hearts: 5,
+    heartsMode: state.heartsMode,
+    totalSlots: total,
+    passed: new Set(),
+    slotFails: {},
+    correct: 0,
+    answered: 0,
+    startedNew: base.queue.filter((s) => s.type === "teach").length,
+    selected: null,
+    awaiting: false,
+    lastCorrect: null,
+    xpEarned: 0
+  };
+  setView("session");
+  renderStep();
+}
+
+function updateSessionBar() {
+  const pct = session.totalSlots ? (session.passed.size / session.totalSlots) * 100 : 0;
+  els.sbarFill.style.width = `${Math.max(0, Math.min(100, pct))}%`;
+  els.sessionHearts.hidden = !session.heartsMode;
+  els.sessionHearts.querySelector("strong").textContent = session.hearts;
+}
+
+function renderStep() {
+  session.selected = null;
+  session.awaiting = false;
+  hideFeedback();
+  els.primaryBtn.className = "btn-primary";
+  if (session.pos >= session.queue.length) { finishSession(); return; }
+  const step = session.queue[session.pos];
+  updateSessionBar();
+
+  if (step.type === "teach") { renderTeach(step); return; }
+  session.currentQ = buildQuestion(step.item, step.mode);
+  renderQuestion(session.currentQ);
+}
+
+function renderTeach(step) {
+  const item = step.item;
+  const examples = learningExamples(item).slice(0, 2);
+  const focus = item.priority === "focus";
+  els.primaryBtn.textContent = "Continue";
+  els.primaryBtn.disabled = false;
+  els.stage.innerHTML = `
+    <div class="teach">
+      <span class="teach-badge ${focus ? "focus" : ""}">${focus ? "Focus word" : "New word"} · ${escapeHtml(item.level)}</span>
+      <div class="teach-term">${escapeHtml(item.term)}</div>
+      <div class="teach-trans">${escapeHtml(item.translation)}</div>
+      ${item.form ? `<div class="teach-form">${escapeHtml(item.type)} · ${escapeHtml(item.form)}</div>` : `<div class="teach-form">${escapeHtml(item.type)}</div>`}
+      <button class="teach-speak" type="button" data-speak="${escapeAttr(item.term)}">🔊 Listen</button>
+      <div class="teach-examples">
+        ${examples.map((ex) => `
+          <div class="ex-card" data-speak="${escapeAttr(ex.de)}">
+            <span class="ex-play">🔊</span>
+            <div class="ex-de">${escapeHtml(ex.de)}</div>
+            <div class="ex-en">${escapeHtml(ex.en)}</div>
+          </div>`).join("")}
+      </div>
+    </div>`;
+  if (state.speech.auto) window.setTimeout(() => speak(item.term), 180);
+}
+
+function renderQuestion(q) {
+  els.primaryBtn.textContent = "Check";
+  els.primaryBtn.disabled = q.kind !== "input" ? true : false;
+  const optionsHtml = q.kind === "choice"
+    ? `<div class="options">${q.options.map((opt, i) => `
+        <button class="option" type="button" data-opt="${escapeAttr(opt)}">
+          <span class="kbd">${i + 1}</span><span>${escapeHtml(opt)}</span>
+        </button>`).join("")}</div>`
+    : `<input class="answer-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type in German">
+       <div class="input-hint"></div>`;
+
+  els.stage.innerHTML = `
+    <div><div class="q-title">${escapeHtml(q.title)}</div>${q.sub ? `<div class="q-sub">${escapeHtml(q.sub)}</div>` : ""}</div>
+    ${q.promptHtml}
+    ${optionsHtml}`;
+
+  if (q.kind === "choice") {
+    els.stage.querySelectorAll(".option").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        session.selected = btn.dataset.opt;
+        els.stage.querySelectorAll(".option").forEach((o) => o.classList.remove("selected"));
+        btn.classList.add("selected");
+        els.primaryBtn.disabled = false;
+      });
+    });
+  } else {
+    const input = els.stage.querySelector(".answer-input");
+    input.addEventListener("input", () => { els.primaryBtn.disabled = input.value.trim() === ""; });
+    input.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); onPrimary(); } });
+    setTimeout(() => input.focus(), 60);
+  }
+  if (q.autospeak && state.speech.auto) window.setTimeout(() => speak(q.speak), 220);
+}
+
+function onPrimary() {
+  if (!session) return;
+  const step = session.queue[session.pos];
+
+  // teach step
+  if (step && step.type === "teach") {
+    recordSeen(step.item);
+    session.passed.add(step.slot);
+    session.pos += 1;
+    renderStep();
+    return;
+  }
+
+  // continue after a checked answer
+  if (session.awaiting) {
+    hideFeedback();
+    if (session.heartsMode && session.hearts <= 0) { renderFail(); return; }
+    session.pos += 1;
+    renderStep();
+    return;
+  }
+
+  // grade the answer
+  const q = session.currentQ;
+  let answer = session.selected;
+  if (q.kind === "input") answer = els.stage.querySelector(".answer-input").value;
+  if (q.kind === "choice" && answer == null) return;
+
+  const correct = isCorrect(answer, q);
+  recordAnswer(q.item, correct);
+  session.answered += 1;
+  session.awaiting = true;
+
+  if (correct) {
+    session.correct += 1;
+    session.passed.add(step.slot);
+    addXp(2);
+    session.xpEarned += 2;
+    sndCorrect();
+  } else {
+    session.slotFails[step.slot] = (session.slotFails[step.slot] || 0) + 1;
+    if (session.heartsMode) session.hearts = Math.max(0, session.hearts - 1);
+    // requeue this slot (unless it has failed too many times)
+    if (session.slotFails[step.slot] < 3) {
+      session.queue.push({ type: "q", item: q.item, mode: q.mode, slot: step.slot, retry: true });
+    } else {
+      session.passed.add(step.slot); // give it to them to avoid a lock
+    }
+    sndWrong();
+  }
+
+  lockChoices(q, answer, correct);
+  showFeedback(correct, q, answer);
+  updateSessionBar();
+}
+
+function recordSeen(item) {
+  const s = itemState(item.id);
+  s.seen = Math.max(1, s.seen);
+  s.mastery = Math.max(s.mastery, 1);
+  if (!s.due) s.due = Date.now();
+  saveState();
+}
+
+function lockChoices(q, answer, correct) {
+  if (q.kind === "choice") {
+    els.stage.querySelectorAll(".option").forEach((btn) => {
+      btn.disabled = true;
+      if (btn.dataset.opt === q.answer) btn.classList.add("correct");
+      else if (btn.dataset.opt === answer && !correct) btn.classList.add("wrong");
+    });
+  } else {
+    const input = els.stage.querySelector(".answer-input");
+    if (input) { input.disabled = true; input.classList.add(correct ? "correct" : "wrong"); }
+  }
+}
+
+function showFeedback(correct, q, answer) {
+  const item = q.item;
+  const ex = q.example || learningExamples(item)[0];
+  els.feedbackSheet.className = `feedback-sheet ${correct ? "correct" : "wrong"}`;
+  const heartsOut = session.heartsMode && session.hearts <= 0;
+  const headText = correct ? "Nice!" : heartsOut ? "Out of hearts" : "Correct answer:";
+  const detail = correct
+    ? `<b>${escapeHtml(item.term)}</b> — ${escapeHtml(item.translation)}`
+    : `<b>${escapeHtml(q.answer)}</b><div class="fb-ex" style="margin-top:2px">${escapeHtml(item.term)} — ${escapeHtml(item.translation)}</div>`;
+  els.feedbackSheet.innerHTML = `
+    <div class="fb-inner">
+      <div class="fb-head"><span class="fb-mark">${correct ? "✓" : "✕"}</span>${headText}</div>
+      <div class="fb-body">${detail}</div>
+      <div class="fb-ex">${escapeHtml(ex.de)}<span class="en"> — ${escapeHtml(ex.en)}</span></div>
+      <button class="fb-speak" type="button" data-speak="${escapeAttr(item.term)}">🔊 Listen</button>
+    </div>`;
+  void els.feedbackSheet.offsetHeight; // flush layout so the slide-up transition plays
+  els.feedbackSheet.classList.add("show");
+
+  els.primaryBtn.textContent = heartsOut ? "See results" : "Continue";
+  els.primaryBtn.className = `btn-primary ${correct ? "go-correct" : "go-wrong"}`;
+  els.primaryBtn.disabled = false;
+  if (!correct) { els.stage.classList.remove("shake"); void els.stage.offsetWidth; els.stage.classList.add("shake"); }
+  els.primaryBtn.focus();
+}
+
+function hideFeedback() {
+  els.feedbackSheet.classList.remove("show");
+}
+
+/* ============================================================
+   Session finish / fail
+   ============================================================ */
+function finishSession() {
+  const accuracy = session.answered ? Math.round((session.correct / session.answered) * 100) : 100;
+  let bonus = 10 + (session.heartsMode ? session.hearts * 2 : 4);
+  if (accuracy === 100) bonus += 5;
+  addXp(bonus);
+  session.xpEarned += bonus;
+
+  const goalWasMet = state.daily.xp >= state.goal;
+  registerStreak();
+
+  let crownedUp = false;
+  if (session.kind === "lesson") {
+    const ls = lessonState(session.lessonId);
+    if (ls.crown < 5) { ls.crown += 1; crownedUp = true; }
+    ls.sessions += 1;
+    saveState();
+  }
+
+  sndFanfare();
+  burstConfetti();
+  renderResult({ accuracy, crownedUp, goalWasMet });
+}
+
+function renderResult({ accuracy, crownedUp, goalWasMet }) {
+  const crown = session.kind === "lesson" ? lessonState(session.lessonId).crown : 0;
+  const crownLine = session.kind === "lesson"
+    ? (crownedUp
+        ? `<div class="crown-pop">👑 Crown ${crown}/5 earned!</div>`
+        : `<div class="crown-pop">👑 Crown ${crown}/5 · already maxed</div>`)
+    : "";
+  els.stage.innerHTML = `
+    <div class="result">
+      <div class="result-emoji">${crownedUp ? "👑" : "🎉"}</div>
+      <h2>${session.kind === "lesson" ? "Lesson complete!" : "Review done!"}</h2>
+      <p class="result-sub">${escapeHtml(session.title)}</p>
+      ${crownLine}
+      <div class="result-stats">
+        <div class="result-stat yellow"><div class="rs-label">Total XP</div><div class="rs-value">+${session.xpEarned}</div></div>
+        <div class="result-stat blue"><div class="rs-label">Accuracy</div><div class="rs-value">${accuracy}%</div></div>
+        <div class="result-stat red"><div class="rs-label">Streak</div><div class="rs-value">🔥${state.streak.count}</div></div>
+      </div>
+      ${goalWasMet ? `<div class="crown-pop" style="color:var(--orange)">⚡ Daily goal reached!</div>` : `<div class="result-sub">${state.goal - state.daily.xp} XP to today's goal</div>`}
+    </div>`;
+  els.feedbackSheet.classList.remove("show");
+  els.primaryBtn.className = "btn-primary";
+  els.primaryBtn.textContent = "Continue";
+  els.primaryBtn.disabled = false;
+  els.primaryBtn.focus();
+  session.done = true;
+}
+
+function renderFail() {
+  const weak = [...new Set(session.queue.filter((s) => session.slotFails[s.slot]).map((s) => s.item))].slice(0, 6);
+  els.stage.innerHTML = `
+    <div class="result">
+      <div class="result-emoji">💔</div>
+      <h2>Out of hearts</h2>
+      <p class="result-sub">You made it ${Math.round((session.passed.size / session.totalSlots) * 100)}% of the way. These words need another look:</p>
+      <div class="result-stats">
+        ${weak.map((it) => `<div class="result-stat red"><div class="rs-value" style="font-size:1rem">${escapeHtml(it.term)}</div></div>`).join("") || `<p class="result-sub">Give it another go!</p>`}
+      </div>
+    </div>`;
+  els.feedbackSheet.classList.remove("show");
+  els.primaryBtn.className = "btn-primary go-wrong";
+  els.primaryBtn.textContent = "Try again";
+  els.primaryBtn.disabled = false;
+  session.failed = true;
+}
+
+function endSessionButton() {
+  // primary button pressed on a result/fail screen
+  if (session.failed) {
+    const lessonId = session.lessonId, chapterId = session.chapterId, kind = session.kind;
+    if (kind === "lesson") startLessonSession(lessonId);
+    else startPracticeSession(chapterId);
+    return;
+  }
+  setView("home");
+  renderHome();
+}
+
+/* ============================================================
+   Confetti
+   ============================================================ */
+function burstConfetti() {
+  const canvas = els.confetti;
+  const ctx = canvas.getContext("2d");
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = window.innerWidth * dpr;
+  canvas.height = window.innerHeight * dpr;
+  ctx.scale(dpr, dpr);
+  const W = window.innerWidth, H = window.innerHeight;
+  const colors = ["#58cc02", "#1cb0f6", "#ffc800", "#ce82ff", "#ff4b4b", "#ff9600"];
+  const parts = Array.from({ length: 130 }, () => ({
+    x: W / 2 + (Math.random() - 0.5) * 120,
+    y: H * 0.32,
+    vx: (Math.random() - 0.5) * 9,
+    vy: Math.random() * -11 - 4,
+    s: 6 + Math.random() * 8,
+    rot: Math.random() * Math.PI,
+    vr: (Math.random() - 0.5) * 0.3,
+    c: colors[Math.floor(Math.random() * colors.length)]
+  }));
+  let frame = 0;
+  function tick() {
+    ctx.clearRect(0, 0, W, H);
+    frame += 1;
+    parts.forEach((p) => {
+      p.vy += 0.32; p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.c;
+      ctx.fillRect(-p.s / 2, -p.s / 2, p.s, p.s * 0.6);
+      ctx.restore();
+    });
+    if (frame < 150) requestAnimationFrame(tick);
+    else ctx.clearRect(0, 0, W, H);
+  }
+  tick();
+}
+
+/* ============================================================
+   Words / Bank
+   ============================================================ */
+function crownGlyphs(mastery) {
+  const filled = Math.min(5, mastery);
+  return `<span class="crn ${filled ? "" : "empty"}">👑</span><span>${filled}/5</span>`;
+}
+function renderBank() {
+  const c = chapterMeta();
+  els.bankMeta.textContent = `Kapitel ${c.number} · ${c.title}`;
+  renderBankChips();
+  const query = normalize(els.searchInput.value || "");
+  let items = chapterWords();
+  if (bankFilter === "learning") items = items.filter((i) => isLearned(i) && itemState(i.id).mastery < 5);
+  else if (bankFilter === "mastered") items = items.filter((i) => itemState(i.id).mastery >= 5);
+  else if (bankFilter === "focus") items = items.filter((i) => i.priority === "focus");
+  else if (bankFilter === "new") items = items.filter((i) => !isLearned(i));
+  items = items.filter((i) => normalize(`${i.term} ${i.translation} ${i.form} ${i.example}`).includes(query));
+
+  els.wordList.innerHTML = "";
+  if (!items.length) {
+    els.wordList.innerHTML = `<p class="bank-meta" style="padding:20px 4px">No words match.</p>`;
+    return;
+  }
+  const frag = document.createDocumentFragment();
+  items.forEach((item) => {
+    const s = itemState(item.id);
+    const ex = learningExamples(item)[0];
+    const div = document.createElement("div");
+    div.className = "word-item";
+    const lessonTitle = lessons.find((l) => l.id === item.lesson)?.title || item.lesson;
+    div.innerHTML = `
+      <div class="word-crowns">${crownGlyphs(s.mastery)}</div>
+      <div class="word-main">
+        <h3>${escapeHtml(item.term)}</h3>
+        <div class="w-meta">${escapeHtml([lessonTitle, item.priority === "focus" ? "focus" : "", item.type, item.form].filter(Boolean).join(" · "))}</div>
+        <div class="w-trans">${escapeHtml(item.translation)}</div>
+        <div class="w-ex">${escapeHtml(ex.de)}<span class="en">${escapeHtml(ex.en)}</span></div>
+      </div>
+      <button class="speak" type="button" data-speak="${escapeAttr(item.term)}">🔊</button>`;
+    frag.appendChild(div);
+  });
+  els.wordList.appendChild(frag);
+}
+function renderBankChips() {
+  const chips = [
+    { id: "all", label: "All" },
+    { id: "new", label: "New" },
+    { id: "learning", label: "Learning" },
+    { id: "mastered", label: "Mastered" },
+    { id: "focus", label: "Focus" }
+  ];
+  els.bankChips.innerHTML = "";
+  chips.forEach((chip) => {
+    const btn = document.createElement("button");
+    btn.className = "filter-chip" + (bankFilter === chip.id ? " active" : "");
+    btn.type = "button";
+    btn.textContent = chip.label;
+    btn.addEventListener("click", () => { bankFilter = chip.id; renderBank(); });
+    els.bankChips.appendChild(btn);
+  });
+}
+
+/* ============================================================
+   Settings / Profile
+   ============================================================ */
+function openSettings() {
+  renderProfileStats();
+  renderGoalOptions();
+  els.settingsModal.hidden = false;
+}
+function closeSettings() { els.settingsModal.hidden = true; }
+function renderProfileStats() {
+  const learned = vocab.filter(isLearned).length;
+  const mastered = vocab.filter((v) => itemState(v.id).mastery >= 5).length;
+  const crowns = Object.values(state.lessons).reduce((s, l) => s + (l.crown || 0), 0);
+  const tiles = [
+    { ico: "⭐", val: state.xp, lbl: "Total XP" },
+    { ico: "🏅", val: `Lv ${levelFor(state.xp)}`, lbl: "Level" },
+    { ico: "🔥", val: state.streak.count, lbl: "Day streak" },
+    { ico: "👑", val: crowns, lbl: "Crowns" },
+    { ico: "📚", val: `${learned}/${vocab.length}`, lbl: "Words seen" },
+    { ico: "✅", val: mastered, lbl: "Mastered" }
+  ];
+  els.profileStats.innerHTML = tiles.map((t) => `
+    <div class="stat-tile"><span class="st-ico">${t.ico}</span><div><div class="st-val">${t.val}</div><div class="st-lbl">${t.lbl}</div></div></div>`).join("");
+}
+function renderGoalOptions() {
+  const goals = [10, 20, 30, 50];
+  els.goalOptions.innerHTML = "";
+  goals.forEach((g) => {
+    const btn = document.createElement("button");
+    btn.className = "pill" + (state.goal === g ? " active" : "");
+    btn.type = "button";
+    btn.textContent = `${g} XP`;
+    btn.addEventListener("click", () => { state.goal = g; saveState(); renderGoalOptions(); updateHud(); });
+    els.goalOptions.appendChild(btn);
+  });
+}
+
+/* ============================================================
+   Events
+   ============================================================ */
+els.primaryBtn.addEventListener("click", () => {
+  if (!session) return;
+  if (session.done || session.failed) { endSessionButton(); return; }
+  onPrimary();
+});
+
+els.quitSession.addEventListener("click", () => {
+  if (session && !session.done && !session.failed && session.answered > 0) {
+    if (!confirm("Quit this session? Progress on answered words is saved.")) return;
+  }
+  setView("home");
+  renderHome();
+});
+
+els.bottomNav.addEventListener("click", (e) => {
+  const btn = e.target.closest(".nav-btn");
+  if (!btn) return;
+  const nav = btn.dataset.nav;
+  if (nav === "home") { setView("home"); renderHome(); }
+  else if (nav === "bank") { setView("bank"); renderBank(); }
+  else if (nav === "practice") { startPracticeSession(currentChapter); }
+  else if (nav === "settings") { openSettings(); }
+});
+
+els.openSettings.addEventListener("click", openSettings);
+els.hudGoal.addEventListener("click", openSettings);
+els.hudHearts.addEventListener("click", openSettings);
+els.settingsModal.querySelectorAll("[data-close-settings]").forEach((el) => el.addEventListener("click", closeSettings));
+
+els.searchInput.addEventListener("input", renderBank);
+
+els.soundToggle.addEventListener("change", () => { state.sound = els.soundToggle.checked; if (state.sound) audio(); saveState(); });
+els.autoSpeak.addEventListener("change", () => { state.speech.auto = els.autoSpeak.checked; saveState(); });
+els.heartsToggle.addEventListener("change", () => { state.heartsMode = els.heartsToggle.checked; saveState(); updateHud(); });
+els.speechRate.addEventListener("change", () => { state.speech.rate = Number(els.speechRate.value); saveState(); });
+els.voiceSelect.addEventListener("change", () => { state.speech.voiceURI = els.voiceSelect.value; saveState(); });
+
+els.resetProgress.addEventListener("click", () => {
+  if (!confirm("Reset all progress, crowns and streaks?")) return;
+  state = JSON.parse(JSON.stringify(defaultState));
+  state.speech = loadState().speech; // keep chosen voice
+  saveState();
+  closeSettings();
+  setView("home");
+  renderHome();
+});
+
+// speak buttons (event delegation)
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-speak]");
+  if (!btn) return;
+  audio(); // unlock audio on gesture
+  speak(btn.dataset.speak);
+});
+
+// keyboard shortcuts inside a session
+document.addEventListener("keydown", (e) => {
+  if (els.body.dataset.view !== "session" || !session) return;
+  if (e.key === "Enter") {
+    if (!els.primaryBtn.disabled) { e.preventDefault(); els.primaryBtn.click(); }
+    return;
+  }
+  if (session.awaiting || session.done || session.failed) return;
+  const q = session.currentQ;
+  if (q && q.kind === "choice" && /^[1-9]$/.test(e.key)) {
+    const idx = Number(e.key) - 1;
+    const opts = els.stage.querySelectorAll(".option");
+    if (opts[idx]) { e.preventDefault(); opts[idx].click(); }
   }
 });
-els.learnTab.addEventListener("click", startLearn);
-els.practiceTab.addEventListener("click", startQuestion);
-els.modeSelect.addEventListener("change", () => {
-  if (studyPhase === "practice") startQuestion();
-});
-els.autoSpeak.addEventListener("change", () => {
-  state.speech.auto = els.autoSpeak.checked;
-  saveState();
-});
-els.speechRate.addEventListener("change", () => {
-  state.speech.rate = Number(els.speechRate.value);
-  saveState();
-});
-els.voiceSelect.addEventListener("change", () => {
-  state.speech.voiceURI = els.voiceSelect.value;
-  saveState();
-});
-els.searchInput.addEventListener("input", renderBank);
-els.resetProgress.addEventListener("click", () => {
-  if (!confirm("Reset all Kapitel progress?")) return;
-  state = { ...defaultState, speech: state.speech, items: {} };
-  saveState();
-  updateStats();
-  startLearn();
-});
-document.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-speak]");
-  if (!button) return;
-  speakGerman(button.dataset.speak);
-});
 
-initSpeechControls();
-renderChapters();
-renderLessons();
-updateStats();
-startLearn();
+/* ============================================================
+   Init
+   ============================================================ */
+ensureDaily();
+initSpeech();
+setView("home");
+renderHome();
+renderBankChips();
