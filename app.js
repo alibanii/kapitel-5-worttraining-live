@@ -1537,6 +1537,8 @@ function showFeedback(correct, q, answer) {
   const item = q.item;
   const ex = q.example || learningExamples(item)[0];
   els.feedbackSheet.className = `feedback-sheet ${correct ? "correct" : "wrong"}`;
+  els.feedbackSheet.hidden = false;
+  els.feedbackSheet.removeAttribute("aria-hidden");
   const heartsOut = session.heartsMode && session.hearts <= 0;
   const headText = correct ? "Nice!" : heartsOut ? "Out of hearts" : "Correct answer:";
   const detail = correct
@@ -1560,7 +1562,10 @@ function showFeedback(correct, q, answer) {
 }
 
 function hideFeedback() {
-  els.feedbackSheet.classList.remove("show");
+  els.feedbackSheet.className = "feedback-sheet";
+  els.feedbackSheet.innerHTML = "";
+  els.feedbackSheet.hidden = true;
+  els.feedbackSheet.setAttribute("aria-hidden", "true");
 }
 
 /* ============================================================
@@ -1609,7 +1614,7 @@ function renderResult({ accuracy, crownedUp, goalWasMet }) {
       </div>
       ${goalWasMet ? `<div class="crown-pop" style="color:var(--orange)">⚡ Daily goal reached!</div>` : `<div class="result-sub">${state.goal - state.daily.xp} XP to today's goal</div>`}
     </div>`;
-  els.feedbackSheet.classList.remove("show");
+  hideFeedback();
   els.primaryBtn.className = "btn-primary";
   els.primaryBtn.textContent = "Continue";
   els.primaryBtn.disabled = false;
@@ -1628,7 +1633,7 @@ function renderFail() {
         ${weak.map((it) => `<div class="result-stat red"><div class="rs-value" style="font-size:1rem">${escapeHtml(it.term)}</div></div>`).join("") || `<p class="result-sub">Give it another go!</p>`}
       </div>
     </div>`;
-  els.feedbackSheet.classList.remove("show");
+  hideFeedback();
   els.primaryBtn.className = "btn-primary go-wrong";
   els.primaryBtn.textContent = "Try again";
   els.primaryBtn.disabled = false;
